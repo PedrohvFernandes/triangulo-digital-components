@@ -1,6 +1,6 @@
   {
     "*/**/*.{ts,tsx}": [
-      "eslint --fix",
-      "eslint"
+      "npm run lint:fix",
+      "git add"
     ]
   }
