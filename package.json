@@ -1,0 +1,87 @@
+{
+  "name": "triangulo-digital-components",
+  "private": true,
+  "description": "Triângulo Digital Components Library - Design System do Triângulo Digital",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:PedrohvFernandes/triangulo-digital-components.git"
+  },
+  "author": {
+    "name": "Pedro Henrique V. Fernandes",
+    "email": "pedrohvfernandes@gmail.com"
+  },
+  "version": "0.0.0",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/triangulo-digital-components.es.js",
+      "require": "./dist/triangulo-digital-components.umd.js"
+    },
+    "./styles.css": {
+      "require": "./dist/styles.css",
+      "default": "./dist/styles.css"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "lint": "eslint . --cache --report-unused-disable-directives && echo \"eslint: no lint errors found!\"",
+    "lint:fix": "eslint . --cache --fix && echo \"eslint: no lint errors found!\"",
+    "preview": "vite preview",
+    "prepublishOnly": "npm run build",
+    "build": "tsc && vite build && npm run build:css",
+    "build:css": "tailwindcss -m -i ./src/tailwind-entry.css -o ./dist/styles.css",
+    "dev:storybook": "concurrently \"npm run storybook:css\" \"storybook dev -p 6006\"",
+    "storybook:css": "tailwindcss -w -i ./src/tailwind-entry.css -o ./src/index.css",
+    "start:storybook": "concurrently \"npm run build-storybook\" \"serve storybook-dist -l 6006\"",
+    "build-storybook": "concurrently \"npm run build-storybook:css\" \"storybook build -o storybook-dist\"",
+    "build-storybook:css": "tailwindcss -m -i ./src/tailwind-entry.css -o ./src/index.css",
+    "prepare": "husky"
+  },
+  "peerDependencies": {
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "devDependencies": {
+    "@chromatic-com/storybook": "^4.1.1",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@eslint/js": "^9.33.0",
+    "@pedrohvfernandes/eslint-config": "^0.1.5",
+    "@storybook/addon-a11y": "^9.1.5",
+    "@storybook/addon-docs": "^9.1.5",
+    "@storybook/addon-vitest": "^9.1.5",
+    "@storybook/manager-api": "^8.6.14",
+    "@storybook/react-vite": "^9.1.5",
+    "@storybook/theming": "^8.6.14",
+    "@tailwindcss/cli": "^4.1.13",
+    "@tailwindcss/vite": "^4.1.13",
+    "@types/node": "^24.3.1",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
+    "@vitejs/plugin-react-swc": "^4.0.1",
+    "@vitest/browser": "^3.2.4",
+    "@vitest/coverage-v8": "^3.2.4",
+    "concurrently": "^9.2.1",
+    "eslint": "^8.57.1",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "eslint-plugin-storybook": "^9.1.5",
+    "globals": "^16.3.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.6",
+    "playwright": "^1.55.0",
+    "semantic-release": "^24.2.8",
+    "serve": "^14.2.5",
+    "storybook": "^9.1.5",
+    "tailwindcss": "^4.1.13",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.39.1",
+    "vite": "^7.1.2",
+    "vite-plugin-dts": "^4.5.4",
+    "vitest": "^3.2.4"
+  }
+}
