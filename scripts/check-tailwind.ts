@@ -1,33 +1,29 @@
 import { execSync } from 'child_process'
 
-function checkPackage(pkg: string): boolean {
+function checkTailwind(): boolean {
   try {
-    require.resolve(pkg)
+    require.resolve('tailwindcss')
     return true
   } catch {
     return false
   }
 }
 
-const requiredPackages = ['tailwindcss']
-const missing: string[] = []
-
-for (const pkg of requiredPackages) {
-  if (!checkPackage(pkg)) {
-    missing.push(pkg)
-  }
-}
-
-if (missing.length > 0) {
-  console.log('\n🚨 [sua-lib] Faltam dependências do TailwindCSS!')
-  console.log('👉 Instalando automaticamente...\n')
+if (!checkTailwind()) {
+  console.log('\n🚨 [triangulo-digital-components] TailwindCSS não encontrado!')
+  console.log('👉 Instalando automaticamente TailwindCSS v4.1.13...\n')
 
   try {
-    execSync(`npm install -D ${missing.join(' ')}`, { stdio: 'inherit' })
-    console.log('\n✅ TailwindCSS configurado com sucesso!\n')
+    execSync(`npm install -D tailwindcss@^4.1.13`, { stdio: 'inherit' })
+    console.log('\n✅ TailwindCSS v4.1.13 instalado com sucesso!\n')
   } catch (error) {
-    console.error('\n❌ Erro ao instalar dependências:', error)
+    console.error('\n❌ Erro ao instalar TailwindCSS:', error)
     console.log('👉 Instale manualmente com:')
-    console.log(`   npm install -D ${missing.join(' ')}\n`)
+    console.log('   npm install -D tailwindcss@^4.1.13\n')
   }
+} else {
+  console.log('\n✅ TailwindCSS já está instalado.')
 }
+console.log(
+  '👉 Certifique-se de que está usando a versão v4.1.13 ou superior.\n',
+)

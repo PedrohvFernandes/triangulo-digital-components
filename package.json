@@ -10,7 +10,7 @@
     "email": "pedrohvfernandes@gmail.com"
   },
   "license": "UNLICENSED",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "type": "module",
   "types": "dist/index.d.ts",
   "exports": {
@@ -40,8 +40,8 @@
     "generate:index": "ts-node scripts/generate-exports.ts",
     "build:css": "tailwindcss -m -i ./src/tailwind-entry.css -o ./dist/styles.css",
     "build:raw-css": "cpx ./src/tailwind-entry.css ./dist/tailwind-entry.css",
-    "build:scripts": "tsc scripts/check-tailwind.ts --outDir dist/scripts",
-    "build": "npm run generate:index && tsc && vite build && npm run build:css && npm run build:raw-css",
+    "build:scripts": "tsc --project tsconfig.scripts.json",
+    "build": "npm run generate:index && tsc && vite build && npm run build:css && npm run build:raw-css && npm run build:scripts",
     "dev": "vite",
     "lint": "eslint . --cache --report-unused-disable-directives && echo \"eslint: no lint errors found!\"",
     "lint:fix": "eslint . --cache --fix && echo \"eslint: no lint errors found!\"",
@@ -59,6 +59,11 @@
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "tailwindcss": "^4.1.13"
+  },
+  "peerDependenciesMeta": {
+    "tailwindcss": {
+      "optional": false
+    }
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^4.1.1",
