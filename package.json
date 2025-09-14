@@ -1,16 +1,23 @@
 {
-  "name": "triangulo-digital-components",
+  "name": "@pedrohvfernandes/triangulo-digital-components",
   "description": "Triângulo Digital Components Library - Design System do Triângulo Digital",
   "repository": {
     "type": "git",
-    "url": "git@github.com:PedrohvFernandes/triangulo-digital-components.git"
+    "url": "https://github.com/PedrohvFernandes/triangulo-digital-components"
   },
   "author": {
     "name": "Pedro Henrique V. Fernandes",
-    "email": "pedrohvfernandes@gmail.com"
+    "email": "pedrohv20fernandes@gmail.com"
   },
+  "keywords": [
+    "DS",
+    "Design System",
+    "React",
+    "Components"
+  ],
+  "homepage": "https://github.com/PedrohvFernandes/triangulo-digital-components#readme",
   "license": "UNLICENSED",
-  "version": "0.1.10",
+  "version": "0.2.0",
   "type": "module",
   "types": "dist/index.d.ts",
   "exports": {
