@@ -1,1 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Roboto:wght@100..900&display=swap');
 @import "tailwindcss" prefix(triangulodigital);
+
+
+@theme{
+  --color-success-darkest: #004020;
+  --color-success-dark: #007339;
+  --color-success-medium: #00A653;
+  --color-success-light: #66D19E;
+  --color-success-lightest: #E7F3ED;
+
+  --color-danger-darkest: #590000;
+  --color-danger-dark: #B21212;
+  --color-danger-medium: #DA2121;
+  --color-danger-light: #F27979;
+  --color-danger-lightest: #FFE5E5;
+
+  --color-neutral-darkest: #000000;
+  --color-neutral-dark: #737780;
+  --color-neutral-medium: #C2C5CC;
+  --color-neutral-light: #E1E2E5;
+  --color-neutral-lightest: #FFFFFF;
+}
+
+/* Dessa forma eu configuro uma font da minha maquina */
+/* @font-face {
+    font-family: Geist;
+    font-display: swap;
+    src: url("/geist.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: Calistoga;
+    font-display: swap;
+    src: url("/calistoga.woff2") format("woff2");
+} */
+
+@theme {
+  /* --font-sans: 'Inter', sans-serif, Geist;  */ /* Exemplo de como usar uma font do google fonts e uma font local */
+  --font-sans: 'Inter', Roboto, sans-serif;
+}

@@ -1,9 +1,11 @@
-import { create } from '@storybook/theming/create';
+import { create } from '@storybook/theming'
 
 export default create({
   base: 'dark',
-  brandTitle: 'My custom Storybook',
-  brandUrl: 'https://example.com',
-  brandImage: 'https://fakeimg.pl/300x150/cccccc/909090?text=Your+Logo',
-  brandTarget: '_self',
-});
+  brandTitle: 'Triângulo Digital Components',
+  brandUrl: 'https://myapp.com',
+  brandImage: '/logo-triangulo-digital-3.png',
+  appContentBg: 'white',
+  appBorderColor: 'grey',
+  appBorderRadius: 4,
+})

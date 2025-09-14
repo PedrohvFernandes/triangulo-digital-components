@@ -1,1 +1,1 @@
-export { Card } from '@/components/card'
+export { TrianguloDigitalButton } from '@/components/button'

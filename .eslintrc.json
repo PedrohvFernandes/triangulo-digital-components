@@ -1,3 +1,5 @@
 {
-  "extends": "@pedrohvfernandes/eslint-config/react"
+  "extends": [
+    "@pedrohvfernandes/eslint-config/react"
+  ]
 }
