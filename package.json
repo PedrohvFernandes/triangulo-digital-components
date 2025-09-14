@@ -10,7 +10,7 @@
     "email": "pedrohvfernandes@gmail.com"
   },
   "license": "UNLICENSED",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "type": "module",
   "types": "dist/index.d.ts",
   "exports": {
@@ -27,6 +27,10 @@
     "./styles.css": {
       "require": "./dist/styles.css",
       "default": "./dist/styles.css"
+    },
+    "./tailwind-entry.css": {
+      "require": "./dist/tailwind-entry.css",
+      "default": "./dist/tailwind-entry.css"
     }
   },
   "files": [
@@ -34,8 +38,9 @@
   ],
   "scripts": {
     "generate:index": "ts-node scripts/generate-exports.ts",
-    "build": "npm run generate:index && tsc && vite build && npm run build:css",
     "build:css": "tailwindcss -m -i ./src/tailwind-entry.css -o ./dist/styles.css",
+    "build:raw-css": "cp ./src/tailwind-entry.css ./dist/tailwind-entry.css",
+    "build": "npm run generate:index && tsc && vite build && npm run build:css && npm run build:raw-css",
     "dev": "vite",
     "lint": "eslint . --cache --report-unused-disable-directives && echo \"eslint: no lint errors found!\"",
     "lint:fix": "eslint . --cache --fix && echo \"eslint: no lint errors found!\"",
