@@ -7,13 +7,13 @@
 #### Next.js
 
 ```bash
-npm install triangulo-digital-components tailwindcss @tailwindcss/postcss
+npm install triangulo-digital-components @tailwindcss/postcss
 ```
 ```bash
-yarn add triangulo-digital-components tailwindcss @tailwindcss/postcss
+yarn add triangulo-digital-components @tailwindcss/postcss
 ```
 ```bash
-pnpm add triangulo-digital-components tailwindcss @tailwindcss/postcss
+pnpm add triangulo-digital-components @tailwindcss/postcss
 ```
 
 
@@ -44,13 +44,13 @@ export default {
 #### React + Vite
 
 ```bash
-npm install triangulo-digital-components tailwindcss @tailwindcss/vite
+npm install triangulo-digital-components @tailwindcss/vite
 ```
 ```bash
-yarn add triangulo-digital-components tailwindcss @tailwindcss/vite
+yarn add triangulo-digital-components @tailwindcss/vite
 ```
 ```bash
-pnpm add triangulo-digital-components tailwindcss @tailwindcss/vite
+pnpm add triangulo-digital-components @tailwindcss/vite
 ```
 
 ###### Configuração do Tailwind CSS:
