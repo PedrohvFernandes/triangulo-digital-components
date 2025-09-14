@@ -15,8 +15,14 @@
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/triangulo-digital-components.es.js",
-      "require": "./dist/triangulo-digital-components.umd.js"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/triangulo-digital-components.es.js"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/triangulo-digital-components.umd.js"
+      }
     },
     "./styles.css": {
       "require": "./dist/styles.css",
