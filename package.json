@@ -10,7 +10,7 @@
     "email": "pedrohvfernandes@gmail.com"
   },
   "license": "UNLICENSED",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "type": "module",
   "types": "dist/index.d.ts",
   "exports": {
@@ -29,8 +29,8 @@
       "default": "./dist/styles.css"
     },
     "./tailwind-entry.css": {
-      "require": "./dist/tailwind-entry.css",
-      "default": "./dist/tailwind-entry.css"
+      "require": "./dist/tailwind-entry.css/tailwind-entry.css",
+      "default": "./dist/tailwind-entry.css/tailwind-entry.css"
     }
   },
   "files": [
