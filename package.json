@@ -1,5 +1,5 @@
 {
-  "name": "@triangulodigital/components",
+  "name": "triangulo-digital-components",
   "description": "Triângulo Digital Components Library - Design System do Triângulo Digital",
   "repository": {
     "type": "git",
@@ -17,7 +17,7 @@
   ],
   "homepage": "https://github.com/PedrohvFernandes/triangulo-digital-components#readme",
   "license": "UNLICENSED",
-  "version": "0.0.0",
+  "version": "0.2.0",
   "type": "module",
   "types": "dist/index.d.ts",
   "exports": {
