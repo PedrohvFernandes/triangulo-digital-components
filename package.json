@@ -11,7 +11,7 @@
     "email": "pedrohvfernandes@gmail.com"
   },
   "license": "UNLICENSED",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "types": "dist/index.d.ts",
   "exports": {
@@ -32,7 +32,7 @@
     "lint": "eslint . --cache --report-unused-disable-directives && echo \"eslint: no lint errors found!\"",
     "lint:fix": "eslint . --cache --fix && echo \"eslint: no lint errors found!\"",
     "preview": "vite preview",
-    "prepublishOnly": "git add . && npm run build",
+    "prepublishOnly": "npm run build",
     "build": "tsc && vite build && npm run build:css",
     "build:css": "tailwindcss -m -i ./src/tailwind-entry.css -o ./dist/styles.css",
     "dev:storybook": "concurrently \"npm run storybook:css\" \"storybook dev -p 6006\"",
