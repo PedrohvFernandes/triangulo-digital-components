@@ -70,7 +70,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: path.resolve(__dirname, 'src/index.ts'),
-      name: 'triangulo-digital-components',
+      name: '@triangulodigital/components',
       fileName: (format) => `triangulo-digital-components.${format}.js`,
       formats: ['es', 'cjs', 'umd'],
     },
