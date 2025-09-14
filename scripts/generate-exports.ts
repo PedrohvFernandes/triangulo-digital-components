@@ -1,9 +1,8 @@
 import fs from 'fs'
 import path from 'path'
-
 import { fileURLToPath } from 'url'
 
-export const dirname =
+const dirname =
   typeof __dirname !== 'undefined'
     ? __dirname
     : path.dirname(fileURLToPath(import.meta.url))
@@ -21,13 +20,13 @@ let rootIndexContent = '// Este arquivo é gerado automaticamente\n\n'
 componentFolders.forEach((folder) => {
   const folderPath = path.join(componentsDir, folder)
 
-  // Pega todos os arquivos TS/TSX que não sejam stories
-  const componentFiles = fs
-    .readdirSync(folderPath)
-    .filter(
-      (f) =>
-        (f.endsWith('.ts') || f.endsWith('.tsx')) && !f.includes('.stories'),
-    )
+  // Pega todos os arquivos TS/TSX que não sejam stories ou index
+  const componentFiles = fs.readdirSync(folderPath).filter(
+    (f) =>
+      (f.endsWith('.ts') || f.endsWith('.tsx')) &&
+      !f.includes('.stories') &&
+      !/^index\.(ts|tsx)$/.test(f), // ignora index.ts / index.tsx
+  )
 
   if (componentFiles.length === 0) return
 
