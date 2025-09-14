@@ -1,1 +1,3 @@
-export { TrianguloDigitalButton } from '@/components/button'
+// Este arquivo é gerado automaticamente
+
+export * from '@/components/button'

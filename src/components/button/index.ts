@@ -1,1 +1,1 @@
-export { TrianguloDigitalButton } from './triangulo-digital-button'
+export * from './triangulo-digital-button'
