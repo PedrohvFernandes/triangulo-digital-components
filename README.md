@@ -15,7 +15,13 @@ yarn add triangulo-digital-components @tailwindcss/postcss
 ```bash
 pnpm add triangulo-digital-components @tailwindcss/postcss
 ```
+ou
 
+```bash
+npx triangulo-digital-components
+npm i @tailwindcss/postcss
+```
+o mesmo para yarn e pnpm
 
 ###### Configuração do Tailwind CSS:
 
@@ -52,6 +58,14 @@ yarn add triangulo-digital-components @tailwindcss/vite
 ```bash
 pnpm add triangulo-digital-components @tailwindcss/vite
 ```
+
+ou
+
+```bash
+npx triangulo-digital-components
+npm i @tailwindcss/vite
+```
+o mesmo para yarn e pnpm
 
 ###### Configuração do Tailwind CSS:
 
