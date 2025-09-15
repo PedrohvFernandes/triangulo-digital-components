@@ -6,7 +6,6 @@ import path, { join, resolve } from 'path'
 import { fileURLToPath, pathToFileURL } from 'url'
 
 // Helpers
-
 const dirname =
   typeof __dirname !== 'undefined'
     ? __dirname
@@ -200,6 +199,14 @@ export default defineConfig({
   }
 
   console.log('\n🎉 Setup concluído!')
+
+  // Desinstala inquirer ao final
+  try {
+    execSync('npm uninstall inquirer', { stdio: 'inherit' })
+    console.log('🗑️ inquirer removido após o setup!')
+  } catch (err) {
+    console.error('❌ Erro ao remover inquirer:', err)
+  }
 }
 
 // Executa
