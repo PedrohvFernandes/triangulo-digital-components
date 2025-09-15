@@ -107,6 +107,7 @@
     "eslint": "^8.57.1",
     "globals": "^16.3.0",
     "husky": "^9.1.7",
+    "inquirer": "^12.9.6",
     "lint-staged": "^16.1.6",
     "playwright": "^1.55.0",
     "semantic-release": "^24.2.8",

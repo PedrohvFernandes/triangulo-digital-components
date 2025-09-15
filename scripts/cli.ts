@@ -1,37 +1,31 @@
 #!/usr/bin/env node
 import { execSync } from 'child_process'
 import { existsSync, readFileSync, writeFileSync, unlinkSync } from 'fs'
-import path, { join } from 'path'
-import { pathToFileURL } from 'url'
+import { join } from 'path'
 
 let installedInquirerTemp = false
 
-// --------------------
-// Função para garantir inquirer
-// --------------------
+// Garantir que inquirer está instalado
 function ensureInquirer() {
   try {
     require.resolve('inquirer')
   } catch {
     console.log('📦 Instalando inquirer temporariamente...')
     execSync('npm install -D inquirer', { stdio: 'inherit' })
-    installedInquirerTemp = true
+    installedInquirerTemp = true // marcou que instalou temporariamente
   }
 }
 ensureInquirer()
-
 const inquirer = (await import('inquirer')).default
 
-// --------------------
-// Helpers para limpar arquivos
-// --------------------
-function cleanFile(filePath: string) {
-  if (existsSync(filePath)) {
+// Helpers para limpeza
+function cleanFile(path: string) {
+  if (existsSync(path)) {
     try {
-      unlinkSync(filePath)
-      console.log(`🗑️  Arquivo ${filePath} removido.`)
+      unlinkSync(path)
+      console.log(`🗑️  Arquivo ${path} removido.`)
     } catch (err) {
-      console.error(`❌ Erro ao remover ${filePath}:`, err)
+      console.error(`❌ Erro ao remover ${path}:`, err)
     }
   }
 }
@@ -45,19 +39,15 @@ function cleanNextConfig() {
   cleanFile(join(process.cwd(), 'postcss.config.js'))
 }
 
-// --------------------
-// Detecta Vite config
-// --------------------
+// Detecta se existe vite.config.ts/js e se é TS
 function detectViteConfig() {
   const viteTs = join(process.cwd(), 'vite.config.ts')
   const viteJs = join(process.cwd(), 'vite.config.js')
   const isTs = existsSync(viteTs) || viteTs.endsWith('.ts')
-  return { configPath: isTs ? viteTs : viteJs }
+  return { viteTs, viteJs, isTs, configPath: isTs ? viteTs : viteJs }
 }
 
-// --------------------
-// Detecta se usa SWC no Vite
-// --------------------
+// Detecta se o projeto usa React SWC
 function detectSwc() {
   try {
     const pkg = JSON.parse(
@@ -70,50 +60,10 @@ function detectSwc() {
   }
 }
 
-// --------------------
-// Executa check-tailwind.ts ou .js
-// --------------------
-async function runCheckTailwind() {
-  const dirname = path.resolve()
-  const tsPath = path.resolve(dirname, './scripts/check-tailwind.ts')
-  const jsPath = path.resolve(dirname, './dist/scripts/check-tailwind.js')
-
-  let modulePath: string
-  if (existsSync(tsPath)) modulePath = tsPath
-  else if (existsSync(jsPath)) modulePath = jsPath
-  else
-    throw new Error('❌ check-tailwind.ts ou check-tailwind.js não encontrado!')
-
-  console.log('⚙️  Executando check-tailwind...')
-  await import(pathToFileURL(modulePath).href)
-}
-
-// --------------------
 // Função principal do setup
-// --------------------
 async function runSetup() {
   console.log('🚀 Bem-vindo ao setup do Triângulo Digital Components!\n')
 
-  // 1️⃣ Instalar a lib no projeto
-  try {
-    console.log('📦 Instalando triangulo-digital-components...')
-    execSync('npm install triangulo-digital-components', { stdio: 'inherit' })
-  } catch (err) {
-    console.error('❌ Erro ao instalar triangulo-digital-components:', err)
-    process.exit(1)
-  }
-
-  // 2️⃣ Rodar check-tailwind
-  try {
-    await runCheckTailwind()
-  } catch (err: unknown) {
-    if (err instanceof Error)
-      console.error('❌ Erro no setup do Tailwind:', err.message)
-    else console.error('❌ Erro no setup do Tailwind:', err)
-    process.exit(1)
-  }
-
-  // 3️⃣ Menu de framework
   const { framework } = await inquirer.prompt([
     {
       type: 'list',
@@ -123,7 +73,7 @@ async function runSetup() {
     },
   ])
 
-  // 4️⃣ Perguntar se quer limpar configuração antiga
+  // Perguntar se quer limpar setup antigo
   let reset = false
   if (framework === 'Vite') {
     const { resetVite } = await inquirer.prompt([
@@ -151,7 +101,7 @@ async function runSetup() {
     if (reset) cleanNextConfig()
   }
 
-  // 5️⃣ Setup específico
+  // Setup Vite
   if (framework === 'Vite') {
     const { configPath } = detectViteConfig()
     const useSwc = detectSwc()
@@ -165,7 +115,6 @@ async function runSetup() {
       console.error('❌ Erro ao instalar dependências do Vite:', err)
     }
 
-    // Criar ou atualizar vite.config
     let configContent = ''
     if (!existsSync(configPath)) {
       const reactPluginImport = useSwc ? 'plugin-react-swc' : 'plugin-react'
@@ -181,6 +130,7 @@ export default defineConfig({
       console.log(`✅ Arquivo ${configPath} criado com plugin TailwindCSS!`)
     } else {
       configContent = readFileSync(configPath, 'utf-8')
+
       if (!configContent.includes('@tailwindcss/vite')) {
         configContent =
           `import tailwindcss from '@tailwindcss/vite';\n` + configContent
@@ -204,7 +154,7 @@ export default defineConfig({
       }
     }
   } else {
-    // Next.js
+    // Setup Next.js
     console.log('📦 Instalando dependências para Next.js + TailwindCSS...')
     try {
       execSync('npm install -D @tailwindcss/postcss', { stdio: 'inherit' })
@@ -213,6 +163,7 @@ export default defineConfig({
     }
 
     const postcssPath = join(process.cwd(), 'postcss.config.js')
+
     if (!existsSync(postcssPath)) {
       const postcssContent = `module.exports = {
   plugins: {
@@ -240,7 +191,7 @@ export default defineConfig({
 
   console.log('\n🎉 Setup concluído!')
 
-  // 6️⃣ Remover inquirer temporário
+  // Desinstala inquirer temporário
   if (installedInquirerTemp) {
     console.log('🗑️ Removendo inquirer temporário...')
     try {
@@ -252,9 +203,7 @@ export default defineConfig({
   }
 }
 
-// --------------------
 // Executa
-// --------------------
 runSetup().catch((err) => {
   console.error('❌ Erro no setup:', err)
   process.exit(1)
