@@ -11,13 +11,13 @@ const dirname =
     ? __dirname
     : path.dirname(fileURLToPath(import.meta.url))
 // Helpers para limpeza
-function cleanFile(path: string) {
-  if (existsSync(path)) {
+function cleanFile(filePath: string) {
+  if (existsSync(filePath)) {
     try {
-      unlinkSync(path)
-      console.log(`🗑️  Arquivo ${path} removido.`)
+      unlinkSync(filePath)
+      console.log(`🗑️  Arquivo ${filePath} removido.`)
     } catch (err) {
-      console.error(`❌ Erro ao remover ${path}:`, err)
+      console.error(`❌ Erro ao remover ${filePath}:`, err)
     }
   }
 }
@@ -46,7 +46,6 @@ function detectSwc() {
 function isTypeScriptProject() {
   return existsSync(join(process.cwd(), 'tsconfig.json'))
 }
-
 // Função para criar/atualizar vite.config
 function setupViteConfig() {
   const useSwc = detectSwc()
@@ -54,7 +53,6 @@ function setupViteConfig() {
   const configPath = isTs
     ? join(process.cwd(), 'vite.config.ts')
     : join(process.cwd(), 'vite.config.js')
-
   const reactPluginImport = useSwc ? 'plugin-react-swc' : 'plugin-react'
 
   if (!existsSync(configPath)) {
@@ -107,47 +105,36 @@ async function runSetup() {
   const tsPath = resolve(dirname, './check-tailwind.ts')
   const jsPath = resolve(dirname, './check-tailwind.js')
   const modulePath = existsSync(tsPath) ? tsPath : jsPath
-
   console.log('⚙️ Executando configuração inicial...')
   await import(pathToFileURL(modulePath).href)
 
-  // Perguntar framework
-  const { framework } = await inquirer.prompt([
+  // Menu único e fluido
+  const answers = await inquirer.prompt([
     {
       type: 'list',
       name: 'framework',
       message: 'Qual framework você está usando?',
       choices: ['Vite', 'Next.js'],
     },
+    {
+      type: 'confirm',
+      name: 'reset',
+      message: (answers) =>
+        answers.framework === 'Vite'
+          ? 'Deseja limpar configurações antigas do Vite antes de criar novas?'
+          : 'Deseja limpar configurações antigas do Next antes de criar novas?',
+      default: true,
+    },
   ])
 
-  // Perguntar se quer limpar setup antigo
-  if (framework === 'Vite') {
-    const { resetVite } = await inquirer.prompt([
-      {
-        type: 'confirm',
-        name: 'resetVite',
-        message:
-          'Deseja limpar configurações antigas do Vite antes de criar novas?',
-        default: true,
-      },
-    ])
-    if (resetVite) cleanViteConfig()
-  } else {
-    const { resetNext } = await inquirer.prompt([
-      {
-        type: 'confirm',
-        name: 'resetNext',
-        message:
-          'Deseja limpar configurações antigas do Next antes de criar novas?',
-        default: true,
-      },
-    ])
-    if (resetNext) cleanNextConfig()
+  // Limpeza de configs antigas
+  if (answers.reset) {
+    if (answers.framework === 'Vite') cleanViteConfig()
+    else cleanNextConfig()
   }
 
   // Setup específico
-  if (framework === 'Vite') {
+  if (answers.framework === 'Vite') {
     console.log('📦 Instalando dependências para Vite + TailwindCSS...')
     const viteDeps = ['@tailwindcss/vite']
     viteDeps.push(
@@ -172,7 +159,7 @@ async function runSetup() {
       const postcssContent = `module.exports = {
   plugins: {
     "@tailwindcss/postcss": {},
-      // adicione aqui outros plugins necessários em formato de objeto
+    // adicione aqui outros plugins necessários em formato de objeto
   },
 };
 `
@@ -195,7 +182,7 @@ async function runSetup() {
 
   console.log('\n🎉 Setup concluído!')
 
-  // Desinstala inquirer ao final
+  // Desinstala inquirer apenas se não estiver no projeto
   try {
     const pkg = JSON.parse(
       readFileSync(join(process.cwd(), 'package.json'), 'utf-8'),
