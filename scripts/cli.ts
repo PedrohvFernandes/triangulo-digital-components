@@ -197,10 +197,18 @@ async function runSetup() {
 
   // Desinstala inquirer ao final
   try {
-    execSync('npm uninstall inquirer', { stdio: 'inherit' })
-    console.log('🗑️ inquirer removido após o setup!')
+    const pkg = JSON.parse(
+      readFileSync(join(process.cwd(), 'package.json'), 'utf-8'),
+    )
+    const deps = { ...pkg.dependencies, ...pkg.devDependencies }
+    if (!deps.inquirer) {
+      execSync('npm uninstall inquirer', { stdio: 'inherit' })
+      console.log('🗑️ inquirer removido após o setup!')
+    } else {
+      console.log('ℹ️ inquirer detectado no projeto. Não será removido.')
+    }
   } catch (err) {
-    console.error('❌ Erro ao remover inquirer:', err)
+    console.error('❌ Erro ao verificar/remover inquirer:', err)
   }
 }
 
