@@ -77,6 +77,7 @@ export default defineConfig({
 ### Importação de estilos globais/tokens/fontes:
 Depois você deve importar os arquivos CSS globalmente em seu projeto, no arquivo `index.css` ou `global.css`:
 ```css
+@import "triangulo-digital-components/fonts.css";
 @import "triangulo-digital-components/styles.css";
 @import "triangulo-digital-components/tailwind-entry.css";
 ```
