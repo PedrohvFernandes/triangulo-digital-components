@@ -63,7 +63,6 @@ ou
 
 ```bash
 npx triangulo-digital-components
-npm i @tailwindcss/vite
 ```
 o mesmo para yarn e pnpm
 
