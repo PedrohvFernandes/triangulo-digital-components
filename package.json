@@ -17,7 +17,7 @@
   ],
   "homepage": "https://github.com/PedrohvFernandes/triangulo-digital-components#readme",
   "license": "UNLICENSED",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "type": "module",
   "types": "dist/index.d.ts",
   "exports": {
@@ -44,17 +44,16 @@
     "dist"
   ],
   "scripts": {
+    "dev": "vite",
+    "preview": "vite preview",
     "generate:index": "ts-node scripts/generate-exports.ts",
     "build:css": "tailwindcss -m -i ./src/tailwind-entry.css -o ./dist/styles.css",
     "build:raw-css": "cpx ./src/tailwind-entry.css ./dist/tailwind-entry.css",
     "build:scripts": "tsc --project tsconfig.scripts.json",
     "build": "npm run generate:index && tsc && vite build && npm run build:css && npm run build:raw-css && npm run build:scripts",
-    "dev": "vite",
     "lint": "eslint . --cache --report-unused-disable-directives && echo \"eslint: no lint errors found!\"",
     "lint:fix": "eslint . --cache --fix && echo \"eslint: no lint errors found!\"",
-    "preview": "vite preview",
     "prepublishOnly": "npm run build",
-    "postinstall": "node dist/scripts/check-tailwind.js",
     "dev:storybook": "concurrently \"npm run storybook:css\" \"storybook dev -p 6006\"",
     "storybook:css": "tailwindcss -w -i ./src/tailwind-entry.css -o ./src/index.css",
     "start:storybook": "concurrently \"npm run build-storybook\" \"serve storybook-dist -l 6006\"",
@@ -116,5 +115,8 @@
     "vite": "^7.1.2",
     "vite-plugin-dts": "^4.5.4",
     "vitest": "^3.2.4"
+  },
+  "bin": {
+    "triangulo-digital": "./dist/scripts/cli.js"
   }
 }

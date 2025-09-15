@@ -4,28 +4,63 @@ import { join } from 'path'
 
 const MIN_VERSION = '4.1.13'
 
+// Nao era necessário rodar esse script, pois na versão 7 do npm foi adicionado o conceito de peer dependencies automaticamente, que ele ja instala as dependencias peer automaticamente. Mas por segurança, deixei o script aqui.
+
+/**
+ * Verifica se o TailwindCSS está instalado e se a versão é igual ou superior à mínima requerida.
+ * Se não estiver instalado ou a versão for inferior, instala a versão mínima requerida.
+ */
+
+/**
+ * Obtém a versão do TailwindCSS:
+ * - Primeiro tenta pelo node_modules
+ * - Depois pelo package.json do projeto
+ * - Depois pelo package-lock.json
+ */
 function getTailwindVersion(): string | null {
   try {
-    // tenta pelo node_modules first
+    // tenta pelo node_modules
     const pkgPath = require.resolve('tailwindcss/package.json', {
       paths: [process.cwd()],
     })
     const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8'))
     return pkg.version
   } catch {
-    // se não encontrar, tenta pelo package.json do projeto
+    // tenta pelo package.json do projeto
     const projectPkgPath = join(process.cwd(), 'package.json')
-    if (!existsSync(projectPkgPath)) return null
-    const projectPkg = JSON.parse(readFileSync(projectPkgPath, 'utf-8'))
-    const version =
-      projectPkg.dependencies?.tailwindcss ||
-      projectPkg.devDependencies?.tailwindcss
-    if (!version) return null
-    // remove ^, ~ ou outros caracteres do version string
-    return version.replace(/^[^\d]*/, '')
+    if (existsSync(projectPkgPath)) {
+      const projectPkg = JSON.parse(readFileSync(projectPkgPath, 'utf-8'))
+      const version =
+        projectPkg.dependencies?.tailwindcss ||
+        projectPkg.devDependencies?.tailwindcss
+      if (version) {
+        return version.replace(/^[^\d]*/, '')
+      }
+    }
+
+    // tenta pelo package-lock.json
+    const lockPath = join(process.cwd(), 'package-lock.json')
+    if (existsSync(lockPath)) {
+      try {
+        const lockFile = JSON.parse(readFileSync(lockPath, 'utf-8'))
+        const tailwindEntry =
+          lockFile.dependencies?.tailwindcss ??
+          lockFile.packages?.['node_modules/tailwindcss']
+        if (tailwindEntry?.version) {
+          return tailwindEntry.version.replace(/^[^\d]*/, '')
+        }
+      } catch {
+        return null
+      }
+    }
+
+    return null
   }
 }
 
+/**
+ * Verifica se a versão instalada atende à mínima
+ */
 function isVersionSatisfied(
   installed: string | null,
   minimum: string,

@@ -10,5 +10,5 @@
     "skipLibCheck": true,
     "declaration": true
   },
-  "include": ["scripts/check-tailwind.ts"]
+  "include": ["scripts/check-tailwind.ts", "scripts/cli.ts"],
 }
