@@ -32,14 +32,6 @@ function cleanNextConfig() {
   cleanFile(join(process.cwd(), 'postcss.config.js'))
 }
 
-// Detecta se existe vite.config.ts/js e se é TS
-function detectViteConfig() {
-  const viteTs = join(process.cwd(), 'vite.config.ts')
-  const viteJs = join(process.cwd(), 'vite.config.js')
-  const isTs = existsSync(viteTs)
-  return { viteTs, viteJs, isTs, configPath: isTs ? viteTs : viteJs }
-}
-
 // Detecta se o projeto usa React SWC
 function detectSwc() {
   try {
@@ -53,6 +45,11 @@ function detectSwc() {
   }
 }
 
+// Detecta se é projeto TypeScript
+function isTypeScriptProject() {
+  return existsSync(join(process.cwd(), 'tsconfig.json'))
+}
+
 // Função principal do setup
 async function runSetup() {
   console.log('🚀 Bem-vindo ao setup do Triângulo Digital Components!\n')
@@ -61,7 +58,7 @@ async function runSetup() {
   console.log('📦 Instalando triangulo-digital-components...')
   execSync('npm install triangulo-digital-components', { stdio: 'inherit' })
 
-  // Descobrir se estamos rodando em TS (dev) ou JS (build)
+  // Descobrir se estamos rodando em TS (dev) ou JS (build) para check-tailwind
   const tsPath = resolve(dirname, './check-tailwind.ts')
   const jsPath = resolve(dirname, './check-tailwind.js')
 
@@ -115,8 +112,11 @@ async function runSetup() {
 
   // Setup Vite
   if (framework === 'Vite') {
-    const { configPath } = detectViteConfig()
     const useSwc = detectSwc()
+    const isTs = isTypeScriptProject()
+    const configPath = isTs
+      ? join(process.cwd(), 'vite.config.ts')
+      : join(process.cwd(), 'vite.config.js')
 
     console.log('📦 Instalando dependências para Vite + TailwindCSS...')
     const viteDeps = ['@tailwindcss/vite']
@@ -127,10 +127,9 @@ async function runSetup() {
       console.error('❌ Erro ao instalar dependências do Vite:', err)
     }
 
-    let configContent = ''
     if (!existsSync(configPath)) {
       const reactPluginImport = useSwc ? 'plugin-react-swc' : 'plugin-react'
-      configContent = `import { defineConfig } from 'vite';
+      const configContent = `import { defineConfig } from 'vite';
 import react from '@vitejs/${reactPluginImport}';
 import tailwindcss from '@tailwindcss/vite';
 
@@ -141,7 +140,7 @@ export default defineConfig({
       writeFileSync(configPath, configContent)
       console.log(`✅ Arquivo ${configPath} criado com plugin TailwindCSS!`)
     } else {
-      configContent = readFileSync(configPath, 'utf-8')
+      let configContent = readFileSync(configPath, 'utf-8')
       if (!configContent.includes('@tailwindcss/vite')) {
         configContent =
           `import tailwindcss from '@tailwindcss/vite';\n` + configContent
@@ -177,7 +176,7 @@ export default defineConfig({
       const postcssContent = `module.exports = {
   plugins: {
     "@tailwindcss/postcss": {},
-    // adicione aqui outros plugins necessários em formato de objeto
+      // adicione aqui outros plugins necessários em formato de objeto
   },
 };
 `
@@ -200,7 +199,7 @@ export default defineConfig({
 
   console.log('\n🎉 Setup concluído!')
 
-  // Desinstala inquirer ao final
+  // Desinstala inquirer após tudo
   try {
     execSync('npm uninstall inquirer', { stdio: 'inherit' })
     console.log('🗑️ inquirer removido após o setup!')
