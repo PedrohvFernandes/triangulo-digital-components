@@ -1,22 +1,9 @@
 #!/usr/bin/env node
+import inquirer from 'inquirer'
 import { execSync } from 'child_process'
 import { existsSync, readFileSync, writeFileSync, unlinkSync } from 'fs'
-import { join } from 'path'
-
-let installedInquirerTemp = false
-
-// Garantir que inquirer está instalado
-function ensureInquirer() {
-  try {
-    require.resolve('inquirer')
-  } catch {
-    console.log('📦 Instalando inquirer temporariamente...')
-    execSync('npm install -D inquirer', { stdio: 'inherit' })
-    installedInquirerTemp = true // marcou que instalou temporariamente
-  }
-}
-ensureInquirer()
-const inquirer = (await import('inquirer')).default
+import { join, resolve, dirname as pathDirname } from 'path'
+import { pathToFileURL } from 'url'
 
 // Helpers para limpeza
 function cleanFile(path: string) {
@@ -43,7 +30,7 @@ function cleanNextConfig() {
 function detectViteConfig() {
   const viteTs = join(process.cwd(), 'vite.config.ts')
   const viteJs = join(process.cwd(), 'vite.config.js')
-  const isTs = existsSync(viteTs) || viteTs.endsWith('.ts')
+  const isTs = existsSync(viteTs)
   return { viteTs, viteJs, isTs, configPath: isTs ? viteTs : viteJs }
 }
 
@@ -64,6 +51,26 @@ function detectSwc() {
 async function runSetup() {
   console.log('🚀 Bem-vindo ao setup do Triângulo Digital Components!\n')
 
+  // Instalar a lib no projeto
+  console.log('📦 Instalando triangulo-digital-components...')
+  execSync('npm install triangulo-digital-components', { stdio: 'inherit' })
+
+  // Descobrir se estamos rodando em TS (dev) ou JS (build)
+  const dirname = pathDirname(__filename)
+  const tsPath = resolve(dirname, './check-tailwind.ts')
+  const jsPath = resolve(dirname, './check-tailwind.js')
+
+  let modulePath: string
+  if (existsSync(tsPath)) {
+    modulePath = tsPath
+  } else {
+    modulePath = jsPath
+  }
+
+  console.log('⚙️ Executando configuração inicial...')
+  await import(pathToFileURL(modulePath).href)
+
+  // Perguntar framework
   const { framework } = await inquirer.prompt([
     {
       type: 'list',
@@ -130,12 +137,10 @@ export default defineConfig({
       console.log(`✅ Arquivo ${configPath} criado com plugin TailwindCSS!`)
     } else {
       configContent = readFileSync(configPath, 'utf-8')
-
       if (!configContent.includes('@tailwindcss/vite')) {
         configContent =
           `import tailwindcss from '@tailwindcss/vite';\n` + configContent
       }
-
       const pluginsMatch = configContent.match(/plugins:\s*\[([\s\S]*?)\]/)
       if (pluginsMatch && !pluginsMatch[1].includes('tailwindcss()')) {
         const newPlugins = pluginsMatch[1].trim()
@@ -163,7 +168,6 @@ export default defineConfig({
     }
 
     const postcssPath = join(process.cwd(), 'postcss.config.js')
-
     if (!existsSync(postcssPath)) {
       const postcssContent = `module.exports = {
   plugins: {
@@ -190,17 +194,6 @@ export default defineConfig({
   }
 
   console.log('\n🎉 Setup concluído!')
-
-  // Desinstala inquirer temporário
-  if (installedInquirerTemp) {
-    console.log('🗑️ Removendo inquirer temporário...')
-    try {
-      execSync('npm uninstall inquirer', { stdio: 'inherit' })
-      console.log('✅ inquirer removido com sucesso!')
-    } catch (err) {
-      console.error('❌ Erro ao remover inquirer:', err)
-    }
-  }
 }
 
 // Executa
