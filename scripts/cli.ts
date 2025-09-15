@@ -2,8 +2,15 @@
 import inquirer from 'inquirer'
 import { execSync } from 'child_process'
 import { existsSync, readFileSync, writeFileSync, unlinkSync } from 'fs'
-import { join, resolve, dirname as pathDirname } from 'path'
-import { pathToFileURL } from 'url'
+import path, { join, resolve } from 'path'
+import { fileURLToPath, pathToFileURL } from 'url'
+
+// Helpers
+
+const dirname =
+  typeof __dirname !== 'undefined'
+    ? __dirname
+    : path.dirname(fileURLToPath(import.meta.url))
 
 // Helpers para limpeza
 function cleanFile(path: string) {
@@ -56,7 +63,6 @@ async function runSetup() {
   execSync('npm install triangulo-digital-components', { stdio: 'inherit' })
 
   // Descobrir se estamos rodando em TS (dev) ou JS (build)
-  const dirname = pathDirname(__filename)
   const tsPath = resolve(dirname, './check-tailwind.ts')
   const jsPath = resolve(dirname, './check-tailwind.js')
 
