@@ -10,7 +10,6 @@ const dirname =
   typeof __dirname !== 'undefined'
     ? __dirname
     : path.dirname(fileURLToPath(import.meta.url))
-
 // Helpers para limpeza
 function cleanFile(path: string) {
   if (existsSync(path)) {
@@ -31,7 +30,6 @@ function cleanViteConfig() {
 function cleanNextConfig() {
   cleanFile(join(process.cwd(), 'postcss.config.js'))
 }
-
 // Detecta se o projeto usa React SWC
 function detectSwc() {
   try {
@@ -44,10 +42,57 @@ function detectSwc() {
     return false
   }
 }
-
 // Detecta se é projeto TypeScript
 function isTypeScriptProject() {
   return existsSync(join(process.cwd(), 'tsconfig.json'))
+}
+
+// Função para criar/atualizar vite.config
+function setupViteConfig() {
+  const useSwc = detectSwc()
+  const isTs = isTypeScriptProject()
+  const configPath = isTs
+    ? join(process.cwd(), 'vite.config.ts')
+    : join(process.cwd(), 'vite.config.js')
+
+  const reactPluginImport = useSwc ? 'plugin-react-swc' : 'plugin-react'
+
+  if (!existsSync(configPath)) {
+    const content = `import { defineConfig } from 'vite';
+import react from '@vitejs/${reactPluginImport}';
+import tailwindcss from '@tailwindcss/vite';
+
+export default defineConfig({
+  plugins: [react(), tailwindcss()],
+});
+`
+    writeFileSync(configPath, content)
+    console.log(`✅ Arquivo ${configPath} criado com plugin TailwindCSS!`)
+    return
+  }
+
+  // Atualizar config existente
+  let content = readFileSync(configPath, 'utf-8')
+  if (!content.includes('@tailwindcss/vite')) {
+    content = `import tailwindcss from '@tailwindcss/vite';\n` + content
+  }
+
+  const pluginsMatch = content.match(/plugins:\s*\[([\s\S]*?)\]/)
+  if (pluginsMatch && !pluginsMatch[1].includes('tailwindcss()')) {
+    const newPlugins = pluginsMatch[1].trim()
+    content = content.replace(
+      pluginsMatch[0],
+      `plugins: [${newPlugins}, tailwindcss()]`,
+    )
+    writeFileSync(configPath, content)
+    console.log(`✅ Plugin TailwindCSS adicionado em ${configPath}`)
+  } else if (!pluginsMatch) {
+    content += '\nplugins: [tailwindcss()],\n'
+    writeFileSync(configPath, content)
+    console.log(`✅ Plugin TailwindCSS adicionado em ${configPath}`)
+  } else {
+    console.log('⚠️ Plugin TailwindCSS já existe no vite.config')
+  }
 }
 
 // Função principal do setup
@@ -61,13 +106,7 @@ async function runSetup() {
   // Descobrir se estamos rodando em TS (dev) ou JS (build) para check-tailwind
   const tsPath = resolve(dirname, './check-tailwind.ts')
   const jsPath = resolve(dirname, './check-tailwind.js')
-
-  let modulePath: string
-  if (existsSync(tsPath)) {
-    modulePath = tsPath
-  } else {
-    modulePath = jsPath
-  }
+  const modulePath = existsSync(tsPath) ? tsPath : jsPath
 
   console.log('⚙️ Executando configuração inicial...')
   await import(pathToFileURL(modulePath).href)
@@ -83,7 +122,6 @@ async function runSetup() {
   ])
 
   // Perguntar se quer limpar setup antigo
-  let reset = false
   if (framework === 'Vite') {
     const { resetVite } = await inquirer.prompt([
       {
@@ -94,8 +132,7 @@ async function runSetup() {
         default: true,
       },
     ])
-    reset = resetVite
-    if (reset) cleanViteConfig()
+    if (resetVite) cleanViteConfig()
   } else {
     const { resetNext } = await inquirer.prompt([
       {
@@ -106,64 +143,23 @@ async function runSetup() {
         default: true,
       },
     ])
-    reset = resetNext
-    if (reset) cleanNextConfig()
+    if (resetNext) cleanNextConfig()
   }
 
-  // Setup Vite
+  // Setup específico
   if (framework === 'Vite') {
-    const useSwc = detectSwc()
-    const isTs = isTypeScriptProject()
-    const configPath = isTs
-      ? join(process.cwd(), 'vite.config.ts')
-      : join(process.cwd(), 'vite.config.js')
-
     console.log('📦 Instalando dependências para Vite + TailwindCSS...')
     const viteDeps = ['@tailwindcss/vite']
-    viteDeps.push(useSwc ? '@vitejs/plugin-react-swc' : '@vitejs/plugin-react')
+    viteDeps.push(
+      detectSwc() ? '@vitejs/plugin-react-swc' : '@vitejs/plugin-react',
+    )
     try {
       execSync(`npm install -D ${viteDeps.join(' ')}`, { stdio: 'inherit' })
     } catch (err) {
       console.error('❌ Erro ao instalar dependências do Vite:', err)
     }
-
-    if (!existsSync(configPath)) {
-      const reactPluginImport = useSwc ? 'plugin-react-swc' : 'plugin-react'
-      const configContent = `import { defineConfig } from 'vite';
-import react from '@vitejs/${reactPluginImport}';
-import tailwindcss from '@tailwindcss/vite';
-
-export default defineConfig({
-  plugins: [react(), tailwindcss()],
-});
-`
-      writeFileSync(configPath, configContent)
-      console.log(`✅ Arquivo ${configPath} criado com plugin TailwindCSS!`)
-    } else {
-      let configContent = readFileSync(configPath, 'utf-8')
-      if (!configContent.includes('@tailwindcss/vite')) {
-        configContent =
-          `import tailwindcss from '@tailwindcss/vite';\n` + configContent
-      }
-      const pluginsMatch = configContent.match(/plugins:\s*\[([\s\S]*?)\]/)
-      if (pluginsMatch && !pluginsMatch[1].includes('tailwindcss()')) {
-        const newPlugins = pluginsMatch[1].trim()
-        configContent = configContent.replace(
-          pluginsMatch[0],
-          `plugins: [${newPlugins}, tailwindcss()]`,
-        )
-        writeFileSync(configPath, configContent)
-        console.log(`✅ Plugin TailwindCSS adicionado em ${configPath}`)
-      } else if (!pluginsMatch) {
-        configContent += '\nplugins: [tailwindcss()],\n'
-        writeFileSync(configPath, configContent)
-        console.log(`✅ Plugin TailwindCSS adicionado em ${configPath}`)
-      } else {
-        console.log('⚠️ Plugin TailwindCSS já existe no vite.config')
-      }
-    }
+    setupViteConfig()
   } else {
-    // Setup Next.js
     console.log('📦 Instalando dependências para Next.js + TailwindCSS...')
     try {
       execSync('npm install -D @tailwindcss/postcss', { stdio: 'inherit' })
@@ -199,7 +195,7 @@ export default defineConfig({
 
   console.log('\n🎉 Setup concluído!')
 
-  // Desinstala inquirer após tudo
+  // Desinstala inquirer ao final
   try {
     execSync('npm uninstall inquirer', { stdio: 'inherit' })
     console.log('🗑️ inquirer removido após o setup!')
