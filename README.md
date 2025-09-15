@@ -22,7 +22,7 @@ npx triangulo-digital-components
 ```
 o mesmo para yarn e pnpm
 
-###### Configuração do Tailwind CSS:
+###### Configuração do Tailwind CSS caso tenha instalado via npm i:
 
 Crie o arquivo `postcss.config.js` / `postcss.config.mjs` na raiz do seu projeto com o seguinte conteúdo:
 
@@ -65,7 +65,7 @@ npx triangulo-digital-components
 ```
 o mesmo para yarn e pnpm
 
-###### Configuração do Tailwind CSS:
+###### Configuração do Tailwind CSS caso tenha instalado via npm i:
 
 Você pode usar a mesma config do next, ou se preferir adicione o plugin do Tailwind CSS no arquivo `vite.config.js` ou `vite.config.ts`:
 ```javascript
