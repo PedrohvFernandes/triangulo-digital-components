@@ -62,7 +62,7 @@
     "dev:storybook": "concurrently \"npm run storybook:css\" \"storybook dev -p 6006\"",
     "storybook:css": "tailwindcss -w -i ./src/tailwind-entry.css -o ./src/index.css",
     "start:storybook": "concurrently \"npm run build-storybook\" \"serve storybook-dist -l 6006\"",
-    "build-storybook": "concurrently \"npm run build-storybook:css\" \"storybook build -o storybook-dist\"",
+    "build-storybook": "concurrently \"npm run build-storybook:css\" \"storybook build -o storybook-dist\" tsc --project tsconfig.storybook.json",
     "build-storybook:css": "tailwindcss -m -i ./src/tailwind-entry.css -o ./src/index.css",
     "prepare": "husky"
   },
