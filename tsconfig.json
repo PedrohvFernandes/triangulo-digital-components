@@ -32,9 +32,12 @@
     },
     {
       "path": "./tsconfig.scripts.json"
+    },
+    {
+      "path": "./tsconfig.storybook.json"
     }
   ],
   "include": [
-    "src"
-  ]
+    "src",
+  ],
 }

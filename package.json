@@ -67,10 +67,10 @@
     "prepare": "husky"
   },
   "peerDependencies": {
+    "inquirer": "^12.9.6",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "tailwindcss": "^4.1.13",
-    "inquirer": "^12.9.6"
+    "tailwindcss": "^4.1.13"
   },
   "peerDependenciesMeta": {
     "tailwindcss": {
