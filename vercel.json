@@ -10,8 +10,5 @@
       "src": "/(.*)",
       "dest": "/storybook-dist/$1"
     }
-  ],
-  "scripts": {
-    "build": "npm run build-storybook"
-  }
+  ]
 }
