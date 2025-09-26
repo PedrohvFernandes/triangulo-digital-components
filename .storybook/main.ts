@@ -12,5 +12,8 @@ const config: StorybookConfig = {
     name: '@storybook/react-vite',
     options: {},
   },
+  managerHead: (head) =>
+    `${head}
+      <link rel="shortcut icon" href="/logo-triangulo-digital.svg" type="image/ico">`,
 }
 export default config
