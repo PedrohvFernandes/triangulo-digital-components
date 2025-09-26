@@ -1,6 +1,6 @@
-import 'triangulo-digital-components/fonts.css'
-import 'triangulo-digital-components/tailwind-entry.css'
-import 'triangulo-digital-components/styles.css'
+import '../../fonts.css'
+import '../../tailwind-entry.css/tailwind-entry.css'
+import '../../styles.css'
 
 type PropsProviderTrianguloDigital = {
   children: React.ReactNode
