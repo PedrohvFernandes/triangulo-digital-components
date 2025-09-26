@@ -25,7 +25,7 @@ mainFolders.forEach((mainFolder) => {
 
   let mainIndexContent = '// Arquivo gerado automaticamente\n\n'
 
-  // 1️⃣ Arquivos diretos da pasta principal (ex: provider.tsx)
+  // 1️⃣ Arquivos diretos da pasta principal
   const mainFiles = fs
     .readdirSync(mainFolderPath)
     .filter(
