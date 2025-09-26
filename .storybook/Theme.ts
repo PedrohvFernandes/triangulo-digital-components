@@ -5,7 +5,7 @@ export default create({
   brandTitle: 'Triângulo Digital Components',
   brandUrl: 'https://myapp.com',
   brandImage: '/triangulo-digital-componentes-branco.svg',
-  appContentBg: 'white',
-  appBorderColor: 'grey',
+  // appContentBg: 'white',
+  appBorderColor: 'white',
   appBorderRadius: 4,
 })
