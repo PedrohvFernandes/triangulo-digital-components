@@ -80,7 +80,7 @@ export default defineConfig({
       entry: path.resolve(__dirname, 'src/index.ts'),
       name: 'triangulo-digital-components',
       fileName: (format) => `triangulo-digital-components.${format}.js`,
-      formats: ['es'],
+      formats: ['es', 'cjs', 'umd'],
     },
     rollupOptions: {
       external: Object.keys(peerDependencies),
