@@ -1,7 +1,6 @@
   {
     "*/**/*.{ts,tsx}": [
       "npm run lint:fix",
-      "npm run lint",
-      "git add ."
+      "npm run lint"
     ]
   }

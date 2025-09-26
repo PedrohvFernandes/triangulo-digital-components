@@ -1,3 +1,13 @@
-// Este arquivo é gerado automaticamente
+// Arquivo gerado automaticamente
 
-export * from '@/components/button'
+// Exporta todos os componentes
+export * from './components'
+
+// Exporta hooks
+export * from './hooks'
+
+// Exporta libs
+export * from './lib'
+
+// Exporta provider
+export { ProviderTrianguloDigital } from './provider'
