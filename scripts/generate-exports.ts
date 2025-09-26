@@ -75,17 +75,14 @@ fs.writeFileSync(rootIndexPath, rootIndexContent, 'utf8')
 // --- Cria o index.ts do SRC com exports gerais ---
 const srcIndexContent = `// Arquivo gerado automaticamente
 
-// Exporta todos os componentes
-export * from "./components";
+// Exporta todos os componentes (incluindo TrianguloProvider dentro de triangulo-digital)
+export * from './components'
 
 // Exporta hooks
-export * from "./hooks";
+export * from './hooks'
 
 // Exporta libs
-export * from "./lib";
-
-// Exporta provider
-export { ProviderTrianguloDigital } from "./provider";
+export * from './lib'
 `
 
 fs.writeFileSync(srcIndexPath, srcIndexContent, 'utf8')
