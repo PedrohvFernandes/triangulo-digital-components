@@ -17,7 +17,7 @@
   ],
   "homepage": "https://github.com/PedrohvFernandes/triangulo-digital-components#readme",
   "license": "UNLICENSED",
-  "version": "0.3.9",
+  "version": "0.3.10",
   "type": "module",
   "types": "dist/index.d.ts",
   "exports": {
@@ -32,16 +32,463 @@
       }
     },
     "./styles.css": {
-      "require": "./dist/styles.css",
       "default": "./dist/styles.css"
     },
     "./tailwind-entry.css": {
-      "require": "./dist/tailwind-entry.css/tailwind-entry.css",
       "default": "./dist/tailwind-entry.css/tailwind-entry.css"
     },
     "./fonts.css": {
-      "require": "./dist/fonts.css",
       "default": "./dist/fonts.css"
+    },
+    "./alert": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/alert/index.d.ts",
+        "default": "./dist/components/shadcn-ui/alert/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/alert/index.d.ts",
+        "default": "./dist/components/shadcn-ui/alert/index.js"
+      }
+    },
+    "./alert-dialog": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/alert-dialog/index.d.ts",
+        "default": "./dist/components/shadcn-ui/alert-dialog/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/alert-dialog/index.d.ts",
+        "default": "./dist/components/shadcn-ui/alert-dialog/index.js"
+      }
+    },
+    "./aspect-ratio": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/aspect-ratio/index.d.ts",
+        "default": "./dist/components/shadcn-ui/aspect-ratio/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/aspect-ratio/index.d.ts",
+        "default": "./dist/components/shadcn-ui/aspect-ratio/index.js"
+      }
+    },
+    "./avatar": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/avatar/index.d.ts",
+        "default": "./dist/components/shadcn-ui/avatar/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/avatar/index.d.ts",
+        "default": "./dist/components/shadcn-ui/avatar/index.js"
+      }
+    },
+    "./badge": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/badge/index.d.ts",
+        "default": "./dist/components/shadcn-ui/badge/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/badge/index.d.ts",
+        "default": "./dist/components/shadcn-ui/badge/index.js"
+      }
+    },
+    "./breadcrumb": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/breadcrumb/index.d.ts",
+        "default": "./dist/components/shadcn-ui/breadcrumb/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/breadcrumb/index.d.ts",
+        "default": "./dist/components/shadcn-ui/breadcrumb/index.js"
+      }
+    },
+    "./button": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/button/index.d.ts",
+        "default": "./dist/components/shadcn-ui/button/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/button/index.d.ts",
+        "default": "./dist/components/shadcn-ui/button/index.js"
+      }
+    },
+    "./calendar": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/calendar/index.d.ts",
+        "default": "./dist/components/shadcn-ui/calendar/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/calendar/index.d.ts",
+        "default": "./dist/components/shadcn-ui/calendar/index.js"
+      }
+    },
+    "./card": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/card/index.d.ts",
+        "default": "./dist/components/shadcn-ui/card/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/card/index.d.ts",
+        "default": "./dist/components/shadcn-ui/card/index.js"
+      }
+    },
+    "./carrousel": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/carrousel/index.d.ts",
+        "default": "./dist/components/shadcn-ui/carrousel/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/carrousel/index.d.ts",
+        "default": "./dist/components/shadcn-ui/carrousel/index.js"
+      }
+    },
+    "./chart": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/chart/index.d.ts",
+        "default": "./dist/components/shadcn-ui/chart/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/chart/index.d.ts",
+        "default": "./dist/components/shadcn-ui/chart/index.js"
+      }
+    },
+    "./checkbox": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/checkbox/index.d.ts",
+        "default": "./dist/components/shadcn-ui/checkbox/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/checkbox/index.d.ts",
+        "default": "./dist/components/shadcn-ui/checkbox/index.js"
+      }
+    },
+    "./collapsible": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/collapsible/index.d.ts",
+        "default": "./dist/components/shadcn-ui/collapsible/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/collapsible/index.d.ts",
+        "default": "./dist/components/shadcn-ui/collapsible/index.js"
+      }
+    },
+    "./command": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/command/index.d.ts",
+        "default": "./dist/components/shadcn-ui/command/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/command/index.d.ts",
+        "default": "./dist/components/shadcn-ui/command/index.js"
+      }
+    },
+    "./context-menu": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/context-menu/index.d.ts",
+        "default": "./dist/components/shadcn-ui/context-menu/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/context-menu/index.d.ts",
+        "default": "./dist/components/shadcn-ui/context-menu/index.js"
+      }
+    },
+    "./dialog": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/dialog/index.d.ts",
+        "default": "./dist/components/shadcn-ui/dialog/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/dialog/index.d.ts",
+        "default": "./dist/components/shadcn-ui/dialog/index.js"
+      }
+    },
+    "./drawer": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/drawer/index.d.ts",
+        "default": "./dist/components/shadcn-ui/drawer/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/drawer/index.d.ts",
+        "default": "./dist/components/shadcn-ui/drawer/index.js"
+      }
+    },
+    "./dropdown-menu": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/dropdown-menu/index.d.ts",
+        "default": "./dist/components/shadcn-ui/dropdown-menu/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/dropdown-menu/index.d.ts",
+        "default": "./dist/components/shadcn-ui/dropdown-menu/index.js"
+      }
+    },
+    "./form": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/form/index.d.ts",
+        "default": "./dist/components/shadcn-ui/form/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/form/index.d.ts",
+        "default": "./dist/components/shadcn-ui/form/index.js"
+      }
+    },
+    "./hover-card": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/hover-card/index.d.ts",
+        "default": "./dist/components/shadcn-ui/hover-card/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/hover-card/index.d.ts",
+        "default": "./dist/components/shadcn-ui/hover-card/index.js"
+      }
+    },
+    "./input": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/input/index.d.ts",
+        "default": "./dist/components/shadcn-ui/input/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/input/index.d.ts",
+        "default": "./dist/components/shadcn-ui/input/index.js"
+      }
+    },
+    "./input-otp": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/input-otp/index.d.ts",
+        "default": "./dist/components/shadcn-ui/input-otp/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/input-otp/index.d.ts",
+        "default": "./dist/components/shadcn-ui/input-otp/index.js"
+      }
+    },
+    "./label": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/label/index.d.ts",
+        "default": "./dist/components/shadcn-ui/label/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/label/index.d.ts",
+        "default": "./dist/components/shadcn-ui/label/index.js"
+      }
+    },
+    "./menubar": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/menubar/index.d.ts",
+        "default": "./dist/components/shadcn-ui/menubar/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/menubar/index.d.ts",
+        "default": "./dist/components/shadcn-ui/menubar/index.js"
+      }
+    },
+    "./navigation-menu": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/navigation-menu/index.d.ts",
+        "default": "./dist/components/shadcn-ui/navigation-menu/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/navigation-menu/index.d.ts",
+        "default": "./dist/components/shadcn-ui/navigation-menu/index.js"
+      }
+    },
+    "./pagination": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/pagination/index.d.ts",
+        "default": "./dist/components/shadcn-ui/pagination/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/pagination/index.d.ts",
+        "default": "./dist/components/shadcn-ui/pagination/index.js"
+      }
+    },
+    "./popover": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/popover/index.d.ts",
+        "default": "./dist/components/shadcn-ui/popover/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/popover/index.d.ts",
+        "default": "./dist/components/shadcn-ui/popover/index.js"
+      }
+    },
+    "./progress": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/progress/index.d.ts",
+        "default": "./dist/components/shadcn-ui/progress/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/progress/index.d.ts",
+        "default": "./dist/components/shadcn-ui/progress/index.js"
+      }
+    },
+    "./radio-group": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/radio-group/index.d.ts",
+        "default": "./dist/components/shadcn-ui/radio-group/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/radio-group/index.d.ts",
+        "default": "./dist/components/shadcn-ui/radio-group/index.js"
+      }
+    },
+    "./resizable": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/resizable/index.d.ts",
+        "default": "./dist/components/shadcn-ui/resizable/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/resizable/index.d.ts",
+        "default": "./dist/components/shadcn-ui/resizable/index.js"
+      }
+    },
+    "./scroll-area": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/scroll-area/index.d.ts",
+        "default": "./dist/components/shadcn-ui/scroll-area/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/scroll-area/index.d.ts",
+        "default": "./dist/components/shadcn-ui/scroll-area/index.js"
+      }
+    },
+    "./select": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/select/index.d.ts",
+        "default": "./dist/components/shadcn-ui/select/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/select/index.d.ts",
+        "default": "./dist/components/shadcn-ui/select/index.js"
+      }
+    },
+    "./separator": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/separator/index.d.ts",
+        "default": "./dist/components/shadcn-ui/separator/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/separator/index.d.ts",
+        "default": "./dist/components/shadcn-ui/separator/index.js"
+      }
+    },
+    "./sheet": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/sheet/index.d.ts",
+        "default": "./dist/components/shadcn-ui/sheet/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/sheet/index.d.ts",
+        "default": "./dist/components/shadcn-ui/sheet/index.js"
+      }
+    },
+    "./sidebar": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/sidebar/index.d.ts",
+        "default": "./dist/components/shadcn-ui/sidebar/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/sidebar/index.d.ts",
+        "default": "./dist/components/shadcn-ui/sidebar/index.js"
+      }
+    },
+    "./skeleton": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/skeleton/index.d.ts",
+        "default": "./dist/components/shadcn-ui/skeleton/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/skeleton/index.d.ts",
+        "default": "./dist/components/shadcn-ui/skeleton/index.js"
+      }
+    },
+    "./slider": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/slider/index.d.ts",
+        "default": "./dist/components/shadcn-ui/slider/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/slider/index.d.ts",
+        "default": "./dist/components/shadcn-ui/slider/index.js"
+      }
+    },
+    "./sonner": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/sonner/index.d.ts",
+        "default": "./dist/components/shadcn-ui/sonner/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/sonner/index.d.ts",
+        "default": "./dist/components/shadcn-ui/sonner/index.js"
+      }
+    },
+    "./switch": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/switch/index.d.ts",
+        "default": "./dist/components/shadcn-ui/switch/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/switch/index.d.ts",
+        "default": "./dist/components/shadcn-ui/switch/index.js"
+      }
+    },
+    "./table": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/table/index.d.ts",
+        "default": "./dist/components/shadcn-ui/table/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/table/index.d.ts",
+        "default": "./dist/components/shadcn-ui/table/index.js"
+      }
+    },
+    "./tabs": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/tabs/index.d.ts",
+        "default": "./dist/components/shadcn-ui/tabs/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/tabs/index.d.ts",
+        "default": "./dist/components/shadcn-ui/tabs/index.js"
+      }
+    },
+    "./textarea": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/textarea/index.d.ts",
+        "default": "./dist/components/shadcn-ui/textarea/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/textarea/index.d.ts",
+        "default": "./dist/components/shadcn-ui/textarea/index.js"
+      }
+    },
+    "./toggle": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/toggle/index.d.ts",
+        "default": "./dist/components/shadcn-ui/toggle/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/toggle/index.d.ts",
+        "default": "./dist/components/shadcn-ui/toggle/index.js"
+      }
+    },
+    "./toggle-group": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/toggle-group/index.d.ts",
+        "default": "./dist/components/shadcn-ui/toggle-group/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/toggle-group/index.d.ts",
+        "default": "./dist/components/shadcn-ui/toggle-group/index.js"
+      }
+    },
+    "./tooltip": {
+      "import": {
+        "types": "./dist/components/shadcn-ui/tooltip/index.d.ts",
+        "default": "./dist/components/shadcn-ui/tooltip/index.js"
+      },
+      "require": {
+        "types": "./dist/components/shadcn-ui/tooltip/index.d.ts",
+        "default": "./dist/components/shadcn-ui/tooltip/index.js"
+      }
     }
   },
   "files": [

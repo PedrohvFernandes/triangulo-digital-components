@@ -19,6 +19,7 @@ const mainFolders = fs
 
 let rootIndexContent = '// Arquivo gerado automaticamente\n\n'
 
+// Gera index.ts nas pastas
 mainFolders.forEach((mainFolder) => {
   const mainFolderPath = path.join(componentsRoot, mainFolder)
   const mainIndexPath = path.join(mainFolderPath, 'index.ts')
@@ -48,7 +49,6 @@ mainFolders.forEach((mainFolder) => {
   componentFolders.forEach((folder) => {
     const folderPath = path.join(mainFolderPath, folder)
 
-    // Lista arquivos .ts/.tsx dentro da subpasta
     const componentFiles = fs
       .readdirSync(folderPath)
       .filter(
@@ -90,16 +90,93 @@ fs.writeFileSync(rootIndexPath, rootIndexContent, 'utf8')
 // Cria src/index.ts com exports gerais
 const srcIndexContent = `// Arquivo gerado automaticamente
 
-// Exporta todos os componentes (incluindo provider dentro de triangulo-digital)
 export * from './components'
-
-// Exporta hooks
 export * from './hooks'
-
-// Exporta libs
 export * from './lib'
 `
-
 fs.writeFileSync(srcIndexPath, srcIndexContent, 'utf8')
 
-console.log('✅ Índices gerados com sucesso (componentes + src/index.ts)!')
+// 3️⃣ Atualiza package.json com exports individuais
+const pkgPath = path.resolve(dirname, '../package.json')
+const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'))
+
+type ExportEntry = {
+  import?: { types: string; default: string }
+  require?: { types: string; default: string }
+  default?: string
+}
+
+const baseExports: Record<string, ExportEntry> = {
+  '.': {
+    import: {
+      types: './dist/index.d.ts',
+      default: './dist/triangulo-digital-components.es.js',
+    },
+    require: {
+      types: './dist/index.d.ts',
+      default: './dist/triangulo-digital-components.umd.js',
+    },
+  },
+  './styles.css': { default: './dist/styles.css' },
+  './tailwind-entry.css': {
+    default: './dist/tailwind-entry.css/tailwind-entry.css',
+  },
+  './fonts.css': { default: './dist/fonts.css' },
+}
+
+// Adiciona exports individuais para cada componente
+mainFolders.forEach((mainFolder) => {
+  const mainFolderPath = path.join(componentsRoot, mainFolder)
+
+  // Arquivos diretos na pasta principal
+  const files = fs
+    .readdirSync(mainFolderPath)
+    .filter(
+      (f) =>
+        (f.endsWith('.ts') || f.endsWith('.tsx')) &&
+        !f.includes('.stories') &&
+        !/^index\.(ts|tsx)$/.test(f),
+    )
+    .map((f) => f.replace(/\.(ts|tsx)$/, ''))
+
+  files.forEach((file) => {
+    const key = `./${file.toLowerCase()}`
+    baseExports[key] = {
+      import: {
+        types: `./dist/components/${mainFolder}/${file}/index.d.ts`,
+        default: `./dist/components/${mainFolder}/${file}/index.js`,
+      },
+      require: {
+        types: `./dist/components/${mainFolder}/${file}/index.d.ts`,
+        default: `./dist/components/${mainFolder}/${file}/index.js`,
+      },
+    }
+  })
+
+  // Subpastas
+  const subFolders = fs
+    .readdirSync(mainFolderPath)
+    .filter((f) => fs.statSync(path.join(mainFolderPath, f)).isDirectory())
+
+  subFolders.forEach((sub) => {
+    const key = `./${sub.toLowerCase()}`
+    baseExports[key] = {
+      import: {
+        types: `./dist/components/${mainFolder}/${sub}/index.d.ts`,
+        default: `./dist/components/${mainFolder}/${sub}/index.js`,
+      },
+      require: {
+        types: `./dist/components/${mainFolder}/${sub}/index.d.ts`,
+        default: `./dist/components/${mainFolder}/${sub}/index.js`,
+      },
+    }
+  })
+})
+
+// Salva package.json atualizado
+pkg.exports = baseExports
+fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2), 'utf8')
+
+console.log(
+  '✅ Índices gerados e package.json atualizado com exports individuais!',
+)
