@@ -17,7 +17,7 @@
   ],
   "homepage": "https://github.com/PedrohvFernandes/triangulo-digital-components#readme",
   "license": "UNLICENSED",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "type": "module",
   "types": "dist/index.d.ts",
   "exports": {
@@ -32,12 +32,15 @@
       }
     },
     "./styles.css": {
+      "require": "./dist/styles.css",
       "default": "./dist/styles.css"
     },
     "./tailwind-entry.css": {
+      "require": "./dist/tailwind-entry.css/tailwind-entry.css",
       "default": "./dist/tailwind-entry.css/tailwind-entry.css"
     },
     "./fonts.css": {
+      "require": "./dist/fonts.css",
       "default": "./dist/fonts.css"
     }
   },
