@@ -70,7 +70,7 @@ export default defineConfig({
       hooks: path.resolve(__dirname, 'src/hooks'),
     },
   },
-  optimizeDeps: { disabled: false },
+  // optimizeDeps: { disabled: false },
   define: {
     'process.env': process.env,
     global: 'window',
@@ -80,7 +80,7 @@ export default defineConfig({
       entry: path.resolve(__dirname, 'src/index.ts'),
       name: 'triangulo-digital-components',
       fileName: (format) => `triangulo-digital-components.${format}.js`,
-      formats: ['es', 'cjs', 'umd'],
+      formats: ['es'],
     },
     rollupOptions: {
       external: Object.keys(peerDependencies),
