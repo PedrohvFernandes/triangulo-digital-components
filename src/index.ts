@@ -1,6 +1,6 @@
 // Arquivo gerado automaticamente
 
-// Exporta todos os componentes (incluindo TrianguloProvider dentro de triangulo-digital)
+// Exporta todos os componentes (incluindo provider dentro de triangulo-digital)
 export * from './components'
 
 // Exporta hooks

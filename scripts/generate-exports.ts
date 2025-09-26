@@ -23,17 +23,32 @@ mainFolders.forEach((mainFolder) => {
   const mainFolderPath = path.join(componentsRoot, mainFolder)
   const mainIndexPath = path.join(mainFolderPath, 'index.ts')
 
-  // Lista subpastas de componentes dentro da pasta principal
+  let mainIndexContent = '// Arquivo gerado automaticamente\n\n'
+
+  // 1️⃣ Arquivos diretos da pasta principal (ex: provider.tsx)
+  const mainFiles = fs
+    .readdirSync(mainFolderPath)
+    .filter(
+      (f) =>
+        (f.endsWith('.ts') || f.endsWith('.tsx')) &&
+        !f.includes('.stories') &&
+        !/^index\.(ts|tsx)$/.test(f),
+    )
+
+  mainFiles.forEach((file) => {
+    const importPath = `./${file.replace(/\.(ts|tsx)$/, '')}`
+    mainIndexContent += `export * from '${importPath}'\n`
+  })
+
+  // 2️⃣ Subpastas de componentes
   const componentFolders = fs
     .readdirSync(mainFolderPath)
     .filter((f) => fs.statSync(path.join(mainFolderPath, f)).isDirectory())
 
-  let mainIndexContent = '// Arquivo gerado automaticamente\n\n'
-
   componentFolders.forEach((folder) => {
     const folderPath = path.join(mainFolderPath, folder)
 
-    // Lista arquivos .ts/.tsx (ignora stories e index)
+    // Lista arquivos .ts/.tsx dentro da subpasta
     const componentFiles = fs
       .readdirSync(folderPath)
       .filter(
@@ -45,7 +60,7 @@ mainFolders.forEach((mainFolder) => {
 
     if (componentFiles.length === 0) return
 
-    // Gera o index.ts dentro da subpasta do componente
+    // Gera index.ts na subpasta
     let componentIndexContent = '// Arquivo gerado automaticamente\n\n'
     componentFiles.forEach((file) => {
       const importPath = `./${file.replace(/\.(ts|tsx)$/, '')}`
@@ -58,24 +73,24 @@ mainFolders.forEach((mainFolder) => {
       'utf8',
     )
 
-    // Adiciona exportação no índice da pasta principal
+    // Adiciona exportação no index da pasta principal
     mainIndexContent += `export * from './${folder}'\n`
   })
 
-  // Cria index.ts na pasta principal (shadcn-ui / triangulo-digital)
+  // Cria index.ts na pasta principal
   fs.writeFileSync(mainIndexPath, mainIndexContent, 'utf8')
 
   // Adiciona exportação no index geral (components/index.ts)
   rootIndexContent += `export * from './${mainFolder}'\n`
 })
 
-// Cria o index.ts geral em components
+// Cria index.ts geral em components
 fs.writeFileSync(rootIndexPath, rootIndexContent, 'utf8')
 
-// --- Cria o index.ts do SRC com exports gerais ---
+// Cria src/index.ts com exports gerais
 const srcIndexContent = `// Arquivo gerado automaticamente
 
-// Exporta todos os componentes (incluindo TrianguloProvider dentro de triangulo-digital)
+// Exporta todos os componentes (incluindo provider dentro de triangulo-digital)
 export * from './components'
 
 // Exporta hooks
