@@ -112,6 +112,4 @@ A documentação completa dos componentes e suas variações está disponível n
 
 ### Futuro:
 - Adicionar mais componentes conforme a necessidade do design system.
-- Adicionar suporte para temas (claro/escuro).
-- Adicionar testes unitários e de integração para garantir a qualidade dos componentes Com Vitest.
-- Lib de componentes shadcn/ui com providers de tema e personalização.
+- Adicionar testes unitários e de integração para garantir a qualidade dos componentes com Vitest.
