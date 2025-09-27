@@ -1,1 +1,3 @@
-export { Typography } from './typography'
+// Arquivo gerado automaticamente
+
+export * from './typography'

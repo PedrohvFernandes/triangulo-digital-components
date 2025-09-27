@@ -1,1 +1,3 @@
-export { ThemeProvider, useTheme } from './provider-theme'
+// Arquivo gerado automaticamente
+
+export * from './provider-theme'
