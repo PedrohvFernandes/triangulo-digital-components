@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { Button } from '.' // ajuste o caminho
+import { Button } from '.'
 
 const meta: Meta<typeof Button> = {
-  title: 'Components/Button',
+  title: 'Componentes Geral/shadcn-ui/Button',
   component: Button,
-  tags: ['autodocs'], // para usar autodocs do Storybook
+  tags: ['autodocs'],
   argTypes: {
     variant: {
       control: 'select',
