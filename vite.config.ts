@@ -13,6 +13,22 @@ const dirname =
     ? __dirname
     : path.dirname(fileURLToPath(import.meta.url))
 
+const alias = {
+  alias: {
+    '@': path.resolve(__dirname, 'src'),
+    components: path.resolve(__dirname, 'src/components'),
+    'components-shadcn-ui': path.resolve(__dirname, 'src/components/shadcn-ui'),
+    'components-triangulo-digital': path.resolve(
+      __dirname,
+      'src/components/triangulo-digital',
+    ),
+    styles: path.resolve(__dirname, 'src/styles'),
+    utils: path.resolve(__dirname, 'src/lib'),
+    types: path.resolve(__dirname, 'src/types'),
+    hooks: path.resolve(__dirname, 'src/hooks'),
+  },
+}
+
 export default defineConfig({
   plugins: [
     react(),
@@ -30,6 +46,7 @@ export default defineConfig({
   ],
   test: {
     projects: [
+      // Projeto Storybook (stories viram testes)
       {
         extends: true,
         plugins: [
@@ -48,27 +65,26 @@ export default defineConfig({
           setupFiles: ['.storybook/vitest.setup.ts'],
         },
       },
+      // Projeto normal para *.test.tsx
+      {
+        test: {
+          name: 'unit',
+          environment: 'jsdom',
+          include: [
+            'src/**/*.test.{ts,tsx}',
+            'src/**/__tests__/*.{ts,tsx}',
+            'src/**/*.spec.{ts,tsx}',
+          ],
+          setupFiles: ['./vitest.setup.ts'],
+          alias: alias.alias,
+        },
+      },
     ],
   },
   server: { port: 3000 },
   preview: { port: 3000 },
   resolve: {
-    alias: {
-      '@': path.resolve(__dirname, 'src'),
-      components: path.resolve(__dirname, 'src/components'),
-      'components-shadcn-ui': path.resolve(
-        __dirname,
-        'src/components/shadcn-ui',
-      ),
-      'components-triangulo-digital': path.resolve(
-        __dirname,
-        'src/components/triangulo-digital',
-      ),
-      styles: path.resolve(__dirname, 'src/styles'),
-      utils: path.resolve(__dirname, 'src/lib'),
-      types: path.resolve(__dirname, 'src/types'),
-      hooks: path.resolve(__dirname, 'src/hooks'),
-    },
+    alias: alias.alias,
   },
   // optimizeDeps: { disabled: false },
   define: {
