@@ -86,7 +86,10 @@ export default defineConfig({
   resolve: {
     alias: alias.alias,
   },
-  // optimizeDeps: { disabled: false },
+  optimizeDeps: {
+    // disabled: false,
+    exclude: ['**/*.stories.tsx'],
+  },
   define: {
     'process.env': process.env,
     global: 'window',

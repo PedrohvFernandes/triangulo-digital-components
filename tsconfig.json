@@ -38,4 +38,15 @@
     "src",
     "vitest.setup.ts",
   ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "test",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "**/*.spec.tsx",
+    "**/*.test.tsx",
+    "**/*.stories.tsx",
+    "**/*.stories.ts"
+  ]
 }
