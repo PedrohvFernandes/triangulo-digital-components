@@ -37,13 +37,4 @@
   "include": [
     "src",
   ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "storybook-dist",
-    "test",
-    "**/*.test.*",
-    "**/*.spec.*",
-    "./src/introduction/*"
-  ]
 }
