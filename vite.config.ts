@@ -36,6 +36,8 @@ export default defineConfig({
       insertTypesEntry: true,
       outDir: 'dist',
       exclude: [
+        '**/*.stories.ts',
+        '**/*.stories.tsx',
         '**/*.test.ts',
         '**/*.test.tsx',
         'node_modules',
@@ -93,7 +95,6 @@ export default defineConfig({
   },
   optimizeDeps: {
     // disabled: false,
-    exclude: ['**/*.stories.tsx'],
   },
   define: {
     'process.env': process.env,
