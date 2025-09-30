@@ -44,7 +44,6 @@
     "test",
     "**/*.test.*",
     "**/*.spec.*",
-    "**/*.stories.tsx",
     "./src/introduction/*"
   ]
 }
