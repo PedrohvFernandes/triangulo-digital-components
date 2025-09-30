@@ -36,17 +36,15 @@
   ],
   "include": [
     "src",
-    "vitest.setup.ts",
   ],
   "exclude": [
     "node_modules",
     "dist",
+    "storybook-dist",
     "test",
-    "**/*.spec.ts",
-    "**/*.test.ts",
-    "**/*.spec.tsx",
-    "**/*.test.tsx",
+    "**/*.test.*",
+    "**/*.spec.*",
     "**/*.stories.tsx",
-    "**/*.stories.ts"
+    "./src/introduction/*"
   ]
 }

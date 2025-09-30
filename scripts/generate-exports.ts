@@ -19,6 +19,14 @@ const mainFolders = fs
 
 let rootIndexContent = '// Arquivo gerado automaticamente\n\n'
 
+// 🔎 Função util para filtrar só os arquivos válidos
+const isValidFile = (f: string) =>
+  (f.endsWith('.ts') || f.endsWith('.tsx')) &&
+  !f.includes('.stories') &&
+  !f.includes('.spec') &&
+  !f.includes('.test') &&
+  !/^index\.(ts|tsx)$/.test(f)
+
 mainFolders.forEach((mainFolder) => {
   const mainFolderPath = path.join(componentsRoot, mainFolder)
   const mainIndexPath = path.join(mainFolderPath, 'index.ts')
@@ -26,14 +34,7 @@ mainFolders.forEach((mainFolder) => {
   let mainIndexContent = '// Arquivo gerado automaticamente\n\n'
 
   // 1️⃣ Arquivos diretos da pasta principal
-  const mainFiles = fs
-    .readdirSync(mainFolderPath)
-    .filter(
-      (f) =>
-        (f.endsWith('.ts') || f.endsWith('.tsx')) &&
-        !f.includes('.stories') &&
-        !/^index\.(ts|tsx)$/.test(f),
-    )
+  const mainFiles = fs.readdirSync(mainFolderPath).filter(isValidFile)
 
   mainFiles.forEach((file) => {
     const importPath = `./${file.replace(/\.(ts|tsx)$/, '')}`
@@ -49,14 +50,7 @@ mainFolders.forEach((mainFolder) => {
     const folderPath = path.join(mainFolderPath, folder)
 
     // Lista arquivos .ts/.tsx dentro da subpasta
-    const componentFiles = fs
-      .readdirSync(folderPath)
-      .filter(
-        (f) =>
-          (f.endsWith('.ts') || f.endsWith('.tsx')) &&
-          !f.includes('.stories') &&
-          !/^index\.(ts|tsx)$/.test(f),
-      )
+    const componentFiles = fs.readdirSync(folderPath).filter(isValidFile)
 
     if (componentFiles.length === 0) return
 
