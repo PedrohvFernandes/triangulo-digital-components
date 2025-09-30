@@ -36,5 +36,6 @@
   ],
   "include": [
     "src",
+    "./vitest.setup.ts"
   ],
 }

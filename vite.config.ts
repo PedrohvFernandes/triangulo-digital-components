@@ -47,6 +47,7 @@ export default defineConfig({
         '**/*.test.*',
         '**/*.spec.*',
         './src/introduction/*',
+        './vitest.setup.ts',
       ],
     }),
     tailwindcss(),
