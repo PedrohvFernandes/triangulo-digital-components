@@ -7,6 +7,7 @@ import { peerDependencies } from './package.json'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { storybookTest } from '@storybook/addon-vitest/vitest-plugin'
+import preserveUseClientDirective from 'rollup-plugin-preserve-use-client'
 
 const dirname =
   typeof __dirname !== 'undefined'
@@ -51,6 +52,7 @@ export default defineConfig({
       ],
     }),
     tailwindcss(),
+    preserveUseClientDirective(),
   ],
   test: {
     projects: [
