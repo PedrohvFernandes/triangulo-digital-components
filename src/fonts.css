@@ -1,1 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Roboto:wght@100..900&display=swap');
+/* Dessa forma eu configuro uma font da minha maquina */
+/* @font-face {
+    font-family: Geist;
+    font-display: swap;
+    src: url("/geist.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: Calistoga;
+    font-display: swap;
+    src: url("/calistoga.woff2") format("woff2");
+} */
+
+@theme {
+  /* --font-sans: 'Inter', sans-serif, Geist;  */ /* Exemplo de como usar uma font do google fonts e uma font local */
+  --font-sans: 'Inter', Roboto, sans-serif;
+}
