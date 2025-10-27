@@ -20,10 +20,12 @@ export const HowToUse = () => (
       Caso queira usar o arquivo com as customizações do tailwind buildado,
       nesse caso não precisa do tailwindcss instalado, pois ele gerou as classes
       para um css nativo ex: bg-primary, mas o intellisense não funciona. Ou
-      seja só interessante usar esse import, caso vá utilizar algum componente
-      dessa lib, porque se não for ficará complicado de aplicar os estilos como
-      bg-primary nos componentes do seu projeto principal, pela falta de
-      intellisense
+      seja, só é interessante usar esse import, caso vá utilizar algum
+      componente dessa lib, pois assim os componentes irão vir com os estilos
+      corretos, e além disso sem o intellisense ficará complicado de aplicar os
+      estilos como bg-primary nos componentes do seu projeto principal, pela
+      falta de intellisense, ele até aplica e funciona, mas fica complicado
+      saber quais classes estão disponíveis.
     </Typography>
 
     <pre className="bg-gray-100 p-3 rounded-md">
@@ -32,9 +34,9 @@ export const HowToUse = () => (
 
     <Typography variant="paragraph">
       Caso queira usar o arquivo raw com as configurações originais do tailwind,
-      aqui ja precisa do tailwindcss instalado, o intellisense funciona, com
-      isso da para aplicar os estilos dessa lib no seus componentes do seu
-      projeto principal
+      aqui já precisa do tailwindcss instalado no projeto principal, o
+      intellisense funciona, com isso dá para aplicar os estilos dessa lib no
+      seus componentes do seu projeto principal
     </Typography>
     <pre className="bg-gray-100 p-3 rounded-md">
       {`@import "triangulo-digital-components/raw.css";`}
