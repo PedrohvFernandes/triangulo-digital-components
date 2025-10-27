@@ -17,7 +17,7 @@
   ],
   "homepage": "https://github.com/PedrohvFernandes/triangulo-digital-components#readme",
   "license": "UNLICENSED",
-  "version": "0.5.6",
+  "version": "0.5.7",
   "type": "module",
   "types": "dist/index.d.ts",
   "exports": {
@@ -64,12 +64,19 @@
   "peerDependencies": {
     "react-dom": "^19.1.1",
     "react": "^19.1.1",
-    "tailwindcss": "^4.1.13"
+    "tailwindcss": "^4.1.13",
+    "inquirer": "^12.9.6"
   },
   "peerDependenciesMeta": {
     "tailwindcss": {
       "optional": false
+    },
+    "inquirer": {
+      "optional": true
     }
+  },
+  "optionalDependencies": {
+    "inquirer": "^12.9.6"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
@@ -115,13 +122,13 @@
     "vite": "^7.1.2",
     "vite-plugin-dts": "^4.5.4",
     "vitest": "^3.2.4",
-    "tailwindcss": "^4.1.13"
+    "tailwindcss": "^4.1.13",
+    "inquirer": "^12.9.6"
   },
   "bin": {
     "triangulo-digital": "./dist/scripts/cli.js"
   },
   "dependencies": {
-    "inquirer": "^12.9.6",
     "clsx": "^2.1.1",
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-alert-dialog": "^1.1.15",
