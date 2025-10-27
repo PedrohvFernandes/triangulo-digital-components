@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import inquirer from 'inquirer'
 import { execSync } from 'child_process'
 import { existsSync, readFileSync, writeFileSync, unlinkSync } from 'fs'
 import path, { join, resolve } from 'path'
@@ -12,7 +11,6 @@ const dirname =
     ? __dirname
     : path.dirname(fileURLToPath(import.meta.url))
 
-// 🧹 Funções de limpeza
 function cleanFile(filePath: string) {
   if (existsSync(filePath)) {
     try {
@@ -39,7 +37,6 @@ function cleanNextConfig() {
   possibleFiles.forEach((file) => cleanFile(join(process.cwd(), file)))
 }
 
-// 📦 Detectores
 function detectSwc() {
   try {
     const pkg = JSON.parse(
@@ -69,7 +66,7 @@ function isPackageInstalled(pkgName: string) {
   }
 }
 
-// ⚙️ Funções de setup
+// ⚙️ Setup Vite
 function setupViteConfig() {
   const useSwc = detectSwc()
   const isTs = isTypeScriptProject()
@@ -94,9 +91,7 @@ export default defineConfig({
     return
   }
 
-  // Atualizar config existente
   let content = readFileSync(configPath, 'utf-8')
-
   if (!content.includes('@tailwindcss/vite')) {
     content = `import tailwindcss from '@tailwindcss/vite';\n${content}`
   }
@@ -119,6 +114,7 @@ export default defineConfig({
   }
 }
 
+// ⚙️ Setup PostCSS (Next.js)
 function createOrUpdatePostcss() {
   const extensions = ['js', 'cjs', 'mjs', 'ts']
   let postcssPath: string | undefined
@@ -159,9 +155,9 @@ module.exports = {
   }
 }
 
-// 🚀 Função principal
+// 🚀 Função principal automática
 async function runSetup() {
-  console.log('🚀 Bem-vindo ao setup do Triângulo Digital Components!\n')
+  console.log('🚀 Iniciando setup do Triângulo Digital Components...\n')
 
   // Instalar a lib principal
   console.log('📦 Instalando triangulo-digital-components...')
@@ -174,35 +170,25 @@ async function runSetup() {
   console.log('⚙️ Executando configuração inicial...')
   await import(pathToFileURL(modulePath).href)
 
-  // Perguntas
-  const answers = await inquirer.prompt([
-    {
-      type: 'list',
-      name: 'framework',
-      message: 'Qual framework você está usando?',
-      choices: ['Vite', 'Next.js'],
-    },
-    {
-      type: 'confirm',
-      name: 'reset',
-      message: (answers) =>
-        answers.framework === 'Vite'
-          ? 'Deseja limpar configurações antigas do Vite antes de criar novas?'
-          : 'Deseja limpar configurações antigas do Next antes de criar novas?',
-      default: true,
-    },
-  ])
+  // Detectar framework automaticamente via package.json (ou fallback)
+  const pkg = JSON.parse(
+    readFileSync(join(process.cwd(), 'package.json'), 'utf-8'),
+  )
+  const deps = { ...pkg.dependencies, ...pkg.devDependencies }
+
+  const framework =
+    deps.vite || deps['vite-plugin-react'] || deps['@vitejs/plugin-react']
+      ? 'Vite'
+      : 'Next.js'
+
+  console.log(`📌 Framework detectado: ${framework}`)
 
   // Limpeza
-  if (answers.reset) {
-    if (answers.framework === 'Vite') cleanViteConfig()
-    else cleanNextConfig()
-  }
+  if (framework === 'Vite') cleanViteConfig()
+  else cleanNextConfig()
 
-  // Configuração por framework
-  if (answers.framework === 'Vite') {
-    console.log('📦 Verificando dependências para Vite + TailwindCSS...')
-
+  // Instalar dependências e configurar
+  if (framework === 'Vite') {
     const viteDeps = []
     if (!isPackageInstalled('@tailwindcss/vite'))
       viteDeps.push('@tailwindcss/vite')
@@ -214,34 +200,19 @@ async function runSetup() {
     if (viteDeps.length > 0) {
       console.log(`📦 Instalando: ${viteDeps.join(', ')}`)
       execSync(`npm install -D ${viteDeps.join(' ')}`, { stdio: 'inherit' })
-    } else {
-      console.log('✅ Todas as dependências já estão instaladas!')
     }
 
     setupViteConfig()
   } else {
-    console.log('📦 Verificando dependências para Next.js + TailwindCSS...')
     if (!isPackageInstalled('@tailwindcss/postcss')) {
       execSync('npm install -D @tailwindcss/postcss', { stdio: 'inherit' })
-    } else {
-      console.log('✅ @tailwindcss/postcss já está instalado!')
     }
-
     createOrUpdatePostcss()
   }
 
   console.log('\n🎉 Setup concluído!')
-
-  // 🧹 Remover inquirer
-  try {
-    execSync('npm uninstall inquirer', { stdio: 'inherit' })
-    console.log('🗑️ inquirer removido após o setup!')
-  } catch (err) {
-    console.error('❌ Erro ao remover inquirer:', err)
-  }
 }
 
-// 🏁 Executa
 runSetup().catch((err) => {
   console.error('❌ Erro no setup:', err)
   process.exit(1)

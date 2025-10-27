@@ -17,7 +17,7 @@
   ],
   "homepage": "https://github.com/PedrohvFernandes/triangulo-digital-components#readme",
   "license": "UNLICENSED",
-  "version": "0.5.8",
+  "version": "0.5.9",
   "type": "module",
   "types": "dist/index.d.ts",
   "exports": {
@@ -62,17 +62,13 @@
     "prepare": "husky"
   },
   "peerDependencies": {
-    "react-dom": "^19.1.1",
     "react": "^19.1.1",
-    "tailwindcss": "^4.1.13",
-    "inquirer": "^12.9.6"
+    "react-dom": "^19.1.1",
+    "tailwindcss": "^4.1.13"
   },
   "peerDependenciesMeta": {
     "tailwindcss": {
       "optional": false
-    },
-    "inquirer": {
-      "optional": true
     }
   },
   "devDependencies": {
@@ -113,20 +109,18 @@
     "semantic-release-ado": "^1.4.0",
     "serve": "^14.2.5",
     "storybook": "^9.1.5",
+    "tailwindcss": "^4.1.13",
     "ts-node": "^10.9.2",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.39.1",
     "vite": "^7.1.2",
     "vite-plugin-dts": "^4.5.4",
-    "vitest": "^3.2.4",
-    "tailwindcss": "^4.1.13",
-    "inquirer": "^12.9.6"
+    "vitest": "^3.2.4"
   },
   "bin": {
     "triangulo-digital": "./dist/scripts/cli.js"
   },
   "dependencies": {
-    "clsx": "^2.1.1",
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-alert-dialog": "^1.1.15",
     "@radix-ui/react-aspect-ratio": "^1.1.7",
@@ -155,6 +149,7 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "@testing-library/react": "^16.3.0",
     "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "date-fns": "^4.1.0",
     "embla-carousel-react": "^8.6.0",
@@ -168,8 +163,8 @@
     "rollup-plugin-preserve-use-client": "^3.0.1",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.1",
+    "tw-animate-css": "^1.4.0",
     "vaul": "^1.1.2",
-    "zod": "^4.1.11",
-    "tw-animate-css": "^1.4.0"
+    "zod": "^4.1.11"
   }
 }
