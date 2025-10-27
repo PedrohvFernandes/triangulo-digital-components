@@ -16,8 +16,8 @@ export const HowToUse = () => (
       no arquivo `index.css` ou `global.css`:
     </Typography>
     <pre className="bg-gray-100 p-3 rounded-md">
-      {`@import "triangulo-digital-components/styles.css";`}
-      {`@import "triangulo-digital-components/raw.css"; /* Caso queira usar o arquivo raw com as configurações originais do tailwind */`}
+      {`@import "triangulo-digital-components/styles.css"; /* Caso queira usar o arquivo com as customizações do tailwind buildado, nesse caso não precisa do tailwindcss instalado, pois ele gerou as classes para um css nativo ex: bg-primary, mas o intellisense não funciona. Ou seja só interessante usar esse import, caso vá utilizar algum componente dessa lib, porque se não for ficará complicado de aplicar os estilos como bg-primary nos componentes do seu projeto principal, pela falta de intellisense */`}
+      {`@import "triangulo-digital-components/raw.css"; /* Caso queira usar o arquivo raw com as configurações originais do tailwind, aqui ja precisa do tailwindcss instalado, o intellisense funciona, com isso da para aplicar os estilos dessa lib no seus componentes do seu projeto principal */`}
     </pre>
     <Typography variant="paragraph">
       Você pode importar o arquivo CSS globalmente em seu projeto no seu ponto

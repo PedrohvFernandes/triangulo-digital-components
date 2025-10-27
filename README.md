@@ -7,13 +7,13 @@
 #### Next.js
 
 ```bash
-npm install triangulo-digital-components @tailwindcss/postcss
+npm install triangulo-digital-components @tailwindcss/postcss tailwindcss@^4.1.13
 ```
 ```bash
-yarn add triangulo-digital-components @tailwindcss/postcss
+yarn add triangulo-digital-components @tailwindcss/postcss tailwindcss@^4.1.13
 ```
 ```bash
-pnpm add triangulo-digital-components @tailwindcss/postcss
+pnpm add triangulo-digital-components @tailwindcss/postcss tailwindcss@^4.1.13
 ```
 ou
 
@@ -49,13 +49,13 @@ export default {
 #### React + Vite
 
 ```bash
-npm install triangulo-digital-components @tailwindcss/vite
+npm install triangulo-digital-components @tailwindcss/vite tailwindcss@^4.1.13
 ```
 ```bash
-yarn add triangulo-digital-components @tailwindcss/vite
+yarn add triangulo-digital-components @tailwindcss/vite tailwindcss@^4.1.13
 ```
 ```bash
-pnpm add triangulo-digital-components @tailwindcss/vite
+pnpm add triangulo-digital-components @tailwindcss/vite tailwindcss@^4.1.13
 ```
 
 ou
@@ -89,8 +89,8 @@ export default defineConfig({
 ### Importação de estilos globais/tokens/fontes:
 Depois você deve importar o(S) arquivo(s) CSS globalmente em seu projeto, no arquivo `index.css` ou `global.css`:
 ```css
-@import "triangulo-digital-components/styles.css";
-@import "triangulo-digital-components/raw.css"; /* Caso queira usar o arquivo raw com as configurações originais do tailwind */
+@import "triangulo-digital-components/styles.css"; /* Caso queira usar o arquivo com as customizações do tailwind buildado, nesse caso não precisa do tailwindcss instalado, pois ele gerou as classes para um css nativo ex: bg-primary, mas o intellisense não funciona. Ou seja só interessante usar esse import, caso vá utilizar algum componente dessa lib, porque se não for ficará complicado de aplicar os estilos como bg-primary nos componentes do seu projeto principal, pela falta de intellisense */
+@import "triangulo-digital-components/raw.css"; /* Caso queira usar o arquivo raw com as configurações originais do tailwind, aqui ja precisa do tailwindcss instalado, o intellisense funciona, com isso da para aplicar os estilos dessa lib no seus componentes do seu projeto principal */
 ```
 
 Você pode importar o arquivo CSS globalmente em seu projeto no seu ponto de entrada, por exemplo, no arquivo `index.js` ou `App.js`, ou se tratando de um projeto next js, no arquivo `_app.js` ou app router no arquivo `layout.js`:
