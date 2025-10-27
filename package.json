@@ -17,7 +17,7 @@
   ],
   "homepage": "https://github.com/PedrohvFernandes/triangulo-digital-components#readme",
   "license": "UNLICENSED",
-  "version": "0.4.8",
+  "version": "0.4.9",
   "type": "module",
   "types": "dist/index.d.ts",
   "exports": {
@@ -48,7 +48,7 @@
     "preview": "vite preview",
     "generate:index": "ts-node scripts/generate-exports.ts",
     "build:css": "tailwindcss -m -i ./src/tailwind-entry.css -o ./dist/styles.css",
-    "build:raw-css": "cpy ./src/tailwind-entry.css ./dist/raw.css",
+    "build:raw-css": "cpy ./src/tailwind-entry.css ./dist --rename=raw.css",
     "build:scripts": "tsc --project tsconfig.scripts.json",
     "build": "npm run generate:index && tsc && vite build && npm run build:css && npm run build:raw-css && npm run build:scripts",
     "lint": "eslint . --cache --report-unused-disable-directives && echo \"eslint: no lint errors found!\"",
