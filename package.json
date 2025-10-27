@@ -64,8 +64,7 @@
   "peerDependencies": {
     "react-dom": "^19.1.1",
     "react": "^19.1.1",
-    "tailwindcss": "^4.1.13",
-    "inquirer": "^12.9.6"
+    "tailwindcss": "^4.1.13"
   },
   "peerDependenciesMeta": {
     "tailwindcss": {
@@ -116,13 +115,13 @@
     "vite": "^7.1.2",
     "vite-plugin-dts": "^4.5.4",
     "vitest": "^3.2.4",
-    "tailwindcss": "^4.1.13",
-    "inquirer": "^12.9.6"
+    "tailwindcss": "^4.1.13"
   },
   "bin": {
     "triangulo-digital": "./dist/scripts/cli.js"
   },
   "dependencies": {
+    "inquirer": "^12.9.6",
     "clsx": "^2.1.1",
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-alert-dialog": "^1.1.15",
