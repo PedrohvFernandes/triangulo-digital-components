@@ -170,16 +170,22 @@ async function runSetup() {
   console.log('⚙️ Executando configuração inicial...')
   await import(pathToFileURL(modulePath).href)
 
-  // Detectar framework automaticamente via package.json (ou fallback)
-  const pkg = JSON.parse(
-    readFileSync(join(process.cwd(), 'package.json'), 'utf-8'),
-  )
-  const deps = { ...pkg.dependencies, ...pkg.devDependencies }
+  // Detectar framework confiável
+  let framework: 'Vite' | 'Next.js' = 'Next.js' // padrão
 
-  const framework =
-    deps.vite || deps['vite-plugin-react'] || deps['@vitejs/plugin-react']
-      ? 'Vite'
-      : 'Next.js'
+  const viteConfigExists =
+    existsSync(join(process.cwd(), 'vite.config.js')) ||
+    existsSync(join(process.cwd(), 'vite.config.ts'))
+
+  const nextConfigExists =
+    existsSync(join(process.cwd(), 'next.config.js')) ||
+    existsSync(join(process.cwd(), 'next.config.mjs'))
+
+  if (viteConfigExists) {
+    framework = 'Vite'
+  } else if (nextConfigExists) {
+    framework = 'Next.js'
+  }
 
   console.log(`📌 Framework detectado: ${framework}`)
 
