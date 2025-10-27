@@ -87,11 +87,10 @@ export default defineConfig({
 ```
 
 ### Importação de estilos globais/tokens/fontes:
-Depois você deve importar os arquivos CSS globalmente em seu projeto, no arquivo `index.css` ou `global.css`:
+Depois você deve importar o(S) arquivo(s) CSS globalmente em seu projeto, no arquivo `index.css` ou `global.css`:
 ```css
-@import "triangulo-digital-components/fonts.css";
 @import "triangulo-digital-components/styles.css";
-@import "triangulo-digital-components/tailwind-entry.css";
+@import "triangulo-digital-components/raw.css"; /* Caso queira usar o arquivo raw com as configurações originais do tailwind */
 ```
 
 Você pode importar o arquivo CSS globalmente em seu projeto no seu ponto de entrada, por exemplo, no arquivo `index.js` ou `App.js`, ou se tratando de um projeto next js, no arquivo `_app.js` ou app router no arquivo `layout.js`:
