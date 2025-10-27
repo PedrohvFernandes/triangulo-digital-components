@@ -11,6 +11,7 @@ const dirname =
     ? __dirname
     : path.dirname(fileURLToPath(import.meta.url))
 
+// 🧩 Funções utilitárias
 function cleanFile(filePath: string) {
   if (existsSync(filePath)) {
     try {
@@ -22,42 +23,10 @@ function cleanFile(filePath: string) {
   }
 }
 
-// Limpeza Vite
-function cleanViteConfig() {
-  cleanFile(join(process.cwd(), 'vite.config.ts'))
-  cleanFile(join(process.cwd(), 'vite.config.js'))
-}
-
-// Limpeza Next/PostCSS
-function cleanNextConfig() {
-  const possibleFiles = [
-    'postcss.config.js',
-    'postcss.config.cjs',
-    'postcss.config.mjs',
-    'postcss.config.ts',
-  ]
-  possibleFiles.forEach((file) => cleanFile(join(process.cwd(), file)))
-}
-
-// Detecta SWC
-function detectSwc() {
-  try {
-    const pkg = JSON.parse(
-      readFileSync(join(process.cwd(), 'package.json'), 'utf-8'),
-    )
-    const deps = { ...pkg.dependencies, ...pkg.devDependencies }
-    return !!deps['@vitejs/plugin-react-swc']
-  } catch {
-    return false
-  }
-}
-
-// Detecta TS
 function isTypeScriptProject() {
   return existsSync(join(process.cwd(), 'tsconfig.json'))
 }
 
-// Verifica se pacote está instalado
 function isPackageInstalled(pkgName: string) {
   try {
     const pkg = JSON.parse(
@@ -71,17 +40,72 @@ function isPackageInstalled(pkgName: string) {
   }
 }
 
-// Configura Vite
+function detectSwc() {
+  try {
+    const pkg = JSON.parse(
+      readFileSync(join(process.cwd(), 'package.json'), 'utf-8'),
+    )
+    const deps = { ...pkg.dependencies, ...pkg.devDependencies }
+    return !!deps['@vitejs/plugin-react-swc']
+  } catch {
+    return false
+  }
+}
+
+// 📄 Detecta a extensão ideal (.ts, .mjs, .js)
+function getDefaultExtension() {
+  let ext = 'js'
+  const isTs = isTypeScriptProject()
+  try {
+    const pkg = JSON.parse(
+      readFileSync(join(process.cwd(), 'package.json'), 'utf-8'),
+    )
+    if (pkg.type === 'module') ext = 'mjs'
+    if (isTs) ext = 'ts'
+  } catch {
+    if (isTs) ext = 'ts'
+  }
+  return ext
+}
+
+// 🧹 Limpezas seguras
+function cleanViteConfig() {
+  const files = [
+    'vite.config.js',
+    'vite.config.cjs',
+    'vite.config.mjs',
+    'vite.config.ts',
+  ]
+  const hasValid = files.some((f) => existsSync(join(process.cwd(), f)))
+  if (!hasValid) {
+    files.forEach((file) => cleanFile(join(process.cwd(), file)))
+  } else {
+    console.log('🧩 Mantendo configuração existente do Vite.')
+  }
+}
+
+function cleanNextConfig() {
+  const files = [
+    'postcss.config.js',
+    'postcss.config.cjs',
+    'postcss.config.mjs',
+    'postcss.config.ts',
+  ]
+  const hasValid = files.some((f) => existsSync(join(process.cwd(), f)))
+  if (!hasValid) {
+    files.forEach((file) => cleanFile(join(process.cwd(), file)))
+  } else {
+    console.log('🧩 Mantendo configuração existente do PostCSS.')
+  }
+}
+
+// ⚙️ Setup Vite
 function setupViteConfig() {
   const useSwc = detectSwc()
-  const isTs = isTypeScriptProject()
-  const configPath = isTs
-    ? join(process.cwd(), 'vite.config.ts')
-    : join(process.cwd(), 'vite.config.js')
-
+  const ext = getDefaultExtension()
+  const configPath = join(process.cwd(), `vite.config.${ext}`)
   const reactPluginImport = useSwc ? 'plugin-react-swc' : 'plugin-react'
 
-  // Se não existe, cria do zero
   if (!existsSync(configPath)) {
     const content = `
 import { defineConfig } from 'vite'
@@ -97,11 +121,12 @@ export default defineConfig({
     return
   }
 
-  // Se existe, apenas adiciona Tailwind sem apagar nada
   let content = readFileSync(configPath, 'utf-8')
+  let updated = false
 
   if (!content.includes('@tailwindcss/vite')) {
     content = `import tailwindcss from '@tailwindcss/vite';\n${content}`
+    updated = true
   }
 
   const pluginsMatch = content.match(/plugins:\s*\[([\s\S]*?)\]/)
@@ -111,18 +136,23 @@ export default defineConfig({
       pluginsMatch[0],
       `plugins: [${newPlugins}, tailwindcss()]`,
     )
-    writeFileSync(configPath, content)
-    console.log(`✅ Plugin TailwindCSS adicionado em ${configPath}`)
+    updated = true
   } else if (!pluginsMatch) {
-    content += '\nplugins: [tailwindcss()],\n'
+    content += `\nexport default defineConfig({ plugins: [tailwindcss()] })\n`
+    updated = true
+  }
+
+  if (updated) {
     writeFileSync(configPath, content)
-    console.log(`✅ Plugin TailwindCSS adicionado em ${configPath}`)
+    console.log(
+      `✅ Plugin TailwindCSS adicionado ou atualizado em ${configPath}`,
+    )
   } else {
     console.log('⚠️ Plugin TailwindCSS já existe no vite.config')
   }
 }
 
-// Configura PostCSS (Next.js)
+// ⚙️ Setup PostCSS (Next.js)
 function createOrUpdatePostcss() {
   const extensions = ['js', 'cjs', 'mjs', 'ts']
   let postcssPath: string | undefined
@@ -135,9 +165,9 @@ function createOrUpdatePostcss() {
     }
   }
 
-  // Se não existe nenhum, cria um novo
   if (!postcssPath) {
-    postcssPath = join(process.cwd(), 'postcss.config.js')
+    const ext = getDefaultExtension()
+    postcssPath = join(process.cwd(), `postcss.config.${ext}`)
     const postcssContent = `
 module.exports = {
   plugins: {
@@ -151,7 +181,6 @@ module.exports = {
     return
   }
 
-  // Se existe, apenas adiciona Tailwind
   let postcssContent = readFileSync(postcssPath, 'utf-8')
   if (!postcssContent.includes('@tailwindcss/postcss')) {
     postcssContent = postcssContent.replace(
@@ -165,45 +194,32 @@ module.exports = {
   }
 }
 
-// Função principal
+// 🚀 Função principal
 async function runSetup() {
   console.log('🚀 Iniciando setup do Triângulo Digital Components...\n')
 
-  // Instala a lib principal
   console.log('📦 Instalando triangulo-digital-components...')
   execSync('npm install triangulo-digital-components', { stdio: 'inherit' })
 
-  // Executa verificação inicial
   const tsPath = resolve(dirname, './check-tailwind.ts')
   const jsPath = resolve(dirname, './check-tailwind.js')
   const modulePath = existsSync(tsPath) ? tsPath : jsPath
   console.log('⚙️ Executando configuração inicial...')
   await import(pathToFileURL(modulePath).href)
 
-  // Detectar framework baseado em arquivos de config
-  let framework: 'Vite' | 'Next.js' = 'Next.js' // padrão
+  const pkg = JSON.parse(
+    readFileSync(join(process.cwd(), 'package.json'), 'utf-8'),
+  )
+  const deps = { ...pkg.dependencies, ...pkg.devDependencies }
 
-  const viteConfigExists =
-    existsSync(join(process.cwd(), 'vite.config.js')) ||
-    existsSync(join(process.cwd(), 'vite.config.ts'))
-
-  const nextConfigExists =
-    existsSync(join(process.cwd(), 'next.config.js')) ||
-    existsSync(join(process.cwd(), 'next.config.mjs'))
-
-  if (viteConfigExists) {
-    framework = 'Vite'
-  } else if (nextConfigExists) {
-    framework = 'Next.js'
-  }
+  const framework =
+    deps.next || deps.next ? 'Next.js' : deps.vite ? 'Vite' : 'Vite'
 
   console.log(`📌 Framework detectado: ${framework}`)
 
-  // Limpeza de configs antigas
   if (framework === 'Vite') cleanViteConfig()
   else cleanNextConfig()
 
-  // Instalar dependências e configurar
   if (framework === 'Vite') {
     const viteDeps = []
     if (!isPackageInstalled('@tailwindcss/vite'))
@@ -226,7 +242,7 @@ async function runSetup() {
     createOrUpdatePostcss()
   }
 
-  console.log('\n🎉 Setup concluído!')
+  console.log('\n🎉 Setup concluído com sucesso!')
 }
 
 runSetup().catch((err) => {
