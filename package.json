@@ -17,7 +17,7 @@
   ],
   "homepage": "https://github.com/PedrohvFernandes/triangulo-digital-components#readme",
   "license": "UNLICENSED",
-  "version": "0.4.9",
+  "version": "0.5.0",
   "type": "module",
   "types": "dist/index.d.ts",
   "exports": {
@@ -72,6 +72,9 @@
   },
   "peerDependenciesMeta": {
     "tailwindcss": {
+      "optional": false
+    },
+    "tw-animate-css": {
       "optional": false
     },
     "inquirer": {
