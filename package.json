@@ -36,8 +36,8 @@
       "default": "./dist/styles.css"
     },
     "./raw.css": {
-      "require": "./dist/raw.css",
-      "default": "./dist/raw.css"
+      "require": "./dist/src/raw.css",
+      "default": "./dist/src/raw.css"
     }
   },
   "files": [
