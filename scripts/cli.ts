@@ -30,7 +30,13 @@ function cleanViteConfig() {
 }
 
 function cleanNextConfig() {
-  cleanFile(join(process.cwd(), 'postcss.config.js'))
+  const possibleFiles = [
+    'postcss.config.js',
+    'postcss.config.cjs',
+    'postcss.config.mjs',
+    'postcss.config.ts',
+  ]
+  possibleFiles.forEach((file) => cleanFile(join(process.cwd(), file)))
 }
 
 // 📦 Detectores
@@ -114,9 +120,19 @@ export default defineConfig({
 }
 
 function createOrUpdatePostcss() {
-  const postcssPath = join(process.cwd(), 'postcss.config.js')
+  const extensions = ['js', 'cjs', 'mjs', 'ts']
+  let postcssPath: string | undefined
 
-  if (!existsSync(postcssPath)) {
+  for (const ext of extensions) {
+    const file = join(process.cwd(), `postcss.config.${ext}`)
+    if (existsSync(file)) {
+      postcssPath = file
+      break
+    }
+  }
+
+  if (!postcssPath) {
+    postcssPath = join(process.cwd(), 'postcss.config.js')
     const postcssContent = `
 module.exports = {
   plugins: {
@@ -139,16 +155,13 @@ module.exports = {
     writeFileSync(postcssPath, postcssContent)
     console.log(`✅ Plugin TailwindCSS adicionado em ${postcssPath}`)
   } else {
-    console.log('⚠️ Plugin TailwindCSS já existe no postcss.config.js')
+    console.log('⚠️ Plugin TailwindCSS já existe no postcss.config')
   }
 }
 
 // 🚀 Função principal
 async function runSetup() {
   console.log('🚀 Bem-vindo ao setup do Triângulo Digital Components!\n')
-
-  // Salvar se o inquirer já existia
-  const hadInquirerBefore = isPackageInstalled('inquirer')
 
   // Instalar a lib principal
   console.log('📦 Instalando triangulo-digital-components...')
@@ -205,20 +218,7 @@ async function runSetup() {
       console.log('✅ Todas as dependências já estão instaladas!')
     }
 
-    if (!answers.reset) {
-      const { addTailwind } = await inquirer.prompt([
-        {
-          type: 'confirm',
-          name: 'addTailwind',
-          message:
-            'Deseja apenas adicionar o plugin TailwindCSS no vite.config existente?',
-          default: true,
-        },
-      ])
-      if (addTailwind) setupViteConfig()
-    } else {
-      setupViteConfig()
-    }
+    setupViteConfig()
   } else {
     console.log('📦 Verificando dependências para Next.js + TailwindCSS...')
     if (!isPackageInstalled('@tailwindcss/postcss')) {
@@ -227,40 +227,17 @@ async function runSetup() {
       console.log('✅ @tailwindcss/postcss já está instalado!')
     }
 
-    if (answers.reset) {
-      cleanNextConfig()
-      createOrUpdatePostcss()
-    } else if (existsSync(join(process.cwd(), 'postcss.config.js'))) {
-      const { addTailwind } = await inquirer.prompt([
-        {
-          type: 'confirm',
-          name: 'addTailwind',
-          message:
-            'Deseja apenas adicionar o plugin TailwindCSS ao postcss.config existente?',
-          default: true,
-        },
-      ])
-      if (addTailwind) createOrUpdatePostcss()
-    } else {
-      console.log(
-        '⚠️ Nenhum postcss.config.js encontrado. Nenhuma modificação feita.',
-      )
-    }
+    createOrUpdatePostcss()
   }
 
   console.log('\n🎉 Setup concluído!')
 
-  // 🧹 Remover inquirer se foi instalado apenas pelo setup
+  // 🧹 Remover inquirer
   try {
-    const stillHasInquirer = isPackageInstalled('inquirer')
-    if (stillHasInquirer && !hadInquirerBefore) {
-      execSync('npm uninstall inquirer', { stdio: 'inherit' })
-      console.log('🗑️ inquirer removido após o setup!')
-    } else if (hadInquirerBefore) {
-      console.log('ℹ️ inquirer já existia no projeto, então não será removido.')
-    }
+    execSync('npm uninstall inquirer', { stdio: 'inherit' })
+    console.log('🗑️ inquirer removido após o setup!')
   } catch (err) {
-    console.error('❌ Erro ao verificar/remover inquirer:', err)
+    console.error('❌ Erro ao remover inquirer:', err)
   }
 }
 
