@@ -51,7 +51,7 @@
     "build:fontcss": "tailwindcss -m -i ./src/fonts.css -o ./dist/fonts.css",
     "build:raw-css": "cpy ./src/tailwind-entry.css ./dist --rename=raw.css",
     "build:scripts": "tsc --project tsconfig.scripts.json",
-    "build": "npm run generate:index && tsc && vite build && npm run build:css && npm run build:raw-css && build:fontcss && npm run build:scripts",
+    "build": "npm run generate:index && tsc && vite build && npm run build:css && npm run build:raw-css && npm run build:fontcss && npm run build:scripts",
     "lint": "eslint . --cache --report-unused-disable-directives && echo \"eslint: no lint errors found!\"",
     "lint:fix": "eslint . --cache --fix && echo \"eslint: no lint errors found!\"",
     "prepublishOnly": "npm run build",
