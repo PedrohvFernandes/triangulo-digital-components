@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 import inquirer from 'inquirer'
 import { execSync } from 'child_process'
 import { existsSync, readFileSync, writeFileSync, unlinkSync } from 'fs'
@@ -10,12 +11,13 @@ const dirname =
   typeof __dirname !== 'undefined'
     ? __dirname
     : path.dirname(fileURLToPath(import.meta.url))
-// Helpers para limpeza
+
+// 🧹 Funções de limpeza
 function cleanFile(filePath: string) {
   if (existsSync(filePath)) {
     try {
       unlinkSync(filePath)
-      console.log(`🗑️  Arquivo ${filePath} removido.`)
+      console.log(`🗑️ Arquivo ${filePath} removido.`)
     } catch (err) {
       console.error(`❌ Erro ao remover ${filePath}:`, err)
     }
@@ -30,7 +32,8 @@ function cleanViteConfig() {
 function cleanNextConfig() {
   cleanFile(join(process.cwd(), 'postcss.config.js'))
 }
-// Detecta se o projeto usa React SWC
+
+// 📦 Detectores
 function detectSwc() {
   try {
     const pkg = JSON.parse(
@@ -42,27 +45,43 @@ function detectSwc() {
     return false
   }
 }
-// Detecta se é projeto TypeScript
+
 function isTypeScriptProject() {
   return existsSync(join(process.cwd(), 'tsconfig.json'))
 }
-// Função para criar/atualizar vite.config
+
+function isPackageInstalled(pkgName: string) {
+  try {
+    const pkg = JSON.parse(
+      readFileSync(join(process.cwd(), 'package.json'), 'utf-8'),
+    )
+    const deps = { ...pkg.dependencies, ...pkg.devDependencies }
+    if (deps[pkgName]) return true
+    return existsSync(join(process.cwd(), 'node_modules', pkgName))
+  } catch {
+    return false
+  }
+}
+
+// ⚙️ Funções de setup
 function setupViteConfig() {
   const useSwc = detectSwc()
   const isTs = isTypeScriptProject()
   const configPath = isTs
     ? join(process.cwd(), 'vite.config.ts')
     : join(process.cwd(), 'vite.config.js')
+
   const reactPluginImport = useSwc ? 'plugin-react-swc' : 'plugin-react'
 
   if (!existsSync(configPath)) {
-    const content = `import { defineConfig } from 'vite';
-import react from '@vitejs/${reactPluginImport}';
-import tailwindcss from '@tailwindcss/vite';
+    const content = `
+import { defineConfig } from 'vite'
+import react from '@vitejs/${reactPluginImport}'
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-});
+})
 `
     writeFileSync(configPath, content)
     console.log(`✅ Arquivo ${configPath} criado com plugin TailwindCSS!`)
@@ -71,8 +90,9 @@ export default defineConfig({
 
   // Atualizar config existente
   let content = readFileSync(configPath, 'utf-8')
+
   if (!content.includes('@tailwindcss/vite')) {
-    content = `import tailwindcss from '@tailwindcss/vite';\n` + content
+    content = `import tailwindcss from '@tailwindcss/vite';\n${content}`
   }
 
   const pluginsMatch = content.match(/plugins:\s*\[([\s\S]*?)\]/)
@@ -93,22 +113,55 @@ export default defineConfig({
   }
 }
 
-// Função principal do setup
+function createOrUpdatePostcss() {
+  const postcssPath = join(process.cwd(), 'postcss.config.js')
+
+  if (!existsSync(postcssPath)) {
+    const postcssContent = `
+module.exports = {
+  plugins: {
+    "@tailwindcss/postcss": {},
+    // outros plugins...
+  },
+}
+`
+    writeFileSync(postcssPath, postcssContent)
+    console.log(`✅ Arquivo ${postcssPath} criado com plugin TailwindCSS!`)
+    return
+  }
+
+  let postcssContent = readFileSync(postcssPath, 'utf-8')
+  if (!postcssContent.includes('@tailwindcss/postcss')) {
+    postcssContent = postcssContent.replace(
+      /(plugins:\s*{)/,
+      "$1\n    '@tailwindcss/postcss': {},",
+    )
+    writeFileSync(postcssPath, postcssContent)
+    console.log(`✅ Plugin TailwindCSS adicionado em ${postcssPath}`)
+  } else {
+    console.log('⚠️ Plugin TailwindCSS já existe no postcss.config.js')
+  }
+}
+
+// 🚀 Função principal
 async function runSetup() {
   console.log('🚀 Bem-vindo ao setup do Triângulo Digital Components!\n')
 
-  // Instalar a lib no projeto
+  // Salvar se o inquirer já existia
+  const hadInquirerBefore = isPackageInstalled('inquirer')
+
+  // Instalar a lib principal
   console.log('📦 Instalando triangulo-digital-components...')
   execSync('npm install triangulo-digital-components', { stdio: 'inherit' })
 
-  // Descobrir se estamos rodando em TS (dev) ou JS (build) para check-tailwind
+  // Executar verificação inicial
   const tsPath = resolve(dirname, './check-tailwind.ts')
   const jsPath = resolve(dirname, './check-tailwind.js')
   const modulePath = existsSync(tsPath) ? tsPath : jsPath
   console.log('⚙️ Executando configuração inicial...')
   await import(pathToFileURL(modulePath).href)
 
-  // Menu único e fluido
+  // Perguntas
   const answers = await inquirer.prompt([
     {
       type: 'list',
@@ -127,79 +180,91 @@ async function runSetup() {
     },
   ])
 
-  // Limpeza de configs antigas
+  // Limpeza
   if (answers.reset) {
     if (answers.framework === 'Vite') cleanViteConfig()
     else cleanNextConfig()
   }
 
-  // Setup específico
+  // Configuração por framework
   if (answers.framework === 'Vite') {
-    console.log('📦 Instalando dependências para Vite + TailwindCSS...')
-    const viteDeps = ['@tailwindcss/vite']
-    viteDeps.push(
-      detectSwc() ? '@vitejs/plugin-react-swc' : '@vitejs/plugin-react',
-    )
-    try {
+    console.log('📦 Verificando dependências para Vite + TailwindCSS...')
+
+    const viteDeps = []
+    if (!isPackageInstalled('@tailwindcss/vite'))
+      viteDeps.push('@tailwindcss/vite')
+    if (detectSwc() && !isPackageInstalled('@vitejs/plugin-react-swc'))
+      viteDeps.push('@vitejs/plugin-react-swc')
+    else if (!detectSwc() && !isPackageInstalled('@vitejs/plugin-react'))
+      viteDeps.push('@vitejs/plugin-react')
+
+    if (viteDeps.length > 0) {
+      console.log(`📦 Instalando: ${viteDeps.join(', ')}`)
       execSync(`npm install -D ${viteDeps.join(' ')}`, { stdio: 'inherit' })
-    } catch (err) {
-      console.error('❌ Erro ao instalar dependências do Vite:', err)
-    }
-    setupViteConfig()
-  } else {
-    console.log('📦 Instalando dependências para Next.js + TailwindCSS...')
-    try {
-      execSync('npm install -D @tailwindcss/postcss', { stdio: 'inherit' })
-    } catch (err) {
-      console.error('❌ Erro ao instalar dependências do Next.js:', err)
+    } else {
+      console.log('✅ Todas as dependências já estão instaladas!')
     }
 
-    const postcssPath = join(process.cwd(), 'postcss.config.js')
-    if (!existsSync(postcssPath)) {
-      const postcssContent = `module.exports = {
-  plugins: {
-    "@tailwindcss/postcss": {},
-    // adicione aqui outros plugins necessários em formato de objeto
-  },
-};
-`
-      writeFileSync(postcssPath, postcssContent)
-      console.log(`✅ Arquivo ${postcssPath} criado com plugin TailwindCSS!`)
+    if (!answers.reset) {
+      const { addTailwind } = await inquirer.prompt([
+        {
+          type: 'confirm',
+          name: 'addTailwind',
+          message:
+            'Deseja apenas adicionar o plugin TailwindCSS no vite.config existente?',
+          default: true,
+        },
+      ])
+      if (addTailwind) setupViteConfig()
     } else {
-      let postcssContent = readFileSync(postcssPath, 'utf-8')
-      if (!postcssContent.includes('@tailwindcss/postcss')) {
-        postcssContent = postcssContent.replace(
-          /(plugins:\s*{)/,
-          "$1\n    '@tailwindcss/postcss': {},",
-        )
-        writeFileSync(postcssPath, postcssContent)
-        console.log(`✅ Plugin TailwindCSS adicionado em ${postcssPath}`)
-      } else {
-        console.log('⚠️ Plugin TailwindCSS já existe no postcss.config.js')
-      }
+      setupViteConfig()
+    }
+  } else {
+    console.log('📦 Verificando dependências para Next.js + TailwindCSS...')
+    if (!isPackageInstalled('@tailwindcss/postcss')) {
+      execSync('npm install -D @tailwindcss/postcss', { stdio: 'inherit' })
+    } else {
+      console.log('✅ @tailwindcss/postcss já está instalado!')
+    }
+
+    if (answers.reset) {
+      cleanNextConfig()
+      createOrUpdatePostcss()
+    } else if (existsSync(join(process.cwd(), 'postcss.config.js'))) {
+      const { addTailwind } = await inquirer.prompt([
+        {
+          type: 'confirm',
+          name: 'addTailwind',
+          message:
+            'Deseja apenas adicionar o plugin TailwindCSS ao postcss.config existente?',
+          default: true,
+        },
+      ])
+      if (addTailwind) createOrUpdatePostcss()
+    } else {
+      console.log(
+        '⚠️ Nenhum postcss.config.js encontrado. Nenhuma modificação feita.',
+      )
     }
   }
 
   console.log('\n🎉 Setup concluído!')
 
-  // Desinstala inquirer apenas se não estiver no projeto
+  // 🧹 Remover inquirer se foi instalado apenas pelo setup
   try {
-    const pkg = JSON.parse(
-      readFileSync(join(process.cwd(), 'package.json'), 'utf-8'),
-    )
-    const deps = { ...pkg.dependencies, ...pkg.devDependencies }
-    if (!deps.inquirer) {
+    const stillHasInquirer = isPackageInstalled('inquirer')
+    if (stillHasInquirer && !hadInquirerBefore) {
       execSync('npm uninstall inquirer', { stdio: 'inherit' })
       console.log('🗑️ inquirer removido após o setup!')
-    } else {
-      console.log('ℹ️ inquirer detectado no projeto. Não será removido.')
+    } else if (hadInquirerBefore) {
+      console.log('ℹ️ inquirer já existia no projeto, então não será removido.')
     }
   } catch (err) {
     console.error('❌ Erro ao verificar/remover inquirer:', err)
   }
 }
 
-// Executa
+// 🏁 Executa
 runSetup().catch((err) => {
   console.error('❌ Erro no setup:', err)
   process.exit(1)
