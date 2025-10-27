@@ -17,7 +17,7 @@
   ],
   "homepage": "https://github.com/PedrohvFernandes/triangulo-digital-components#readme",
   "license": "UNLICENSED",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "type": "module",
   "types": "dist/index.d.ts",
   "exports": {
